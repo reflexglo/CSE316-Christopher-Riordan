@@ -5,6 +5,11 @@ import ToDoListItem from './ToDoListItem.js'
 import jsTPS from '../common/jsTPS.js'
 import AddNewItem_Transaction from './transactions/AddNewItem_Transaction.js'
 import MoveItemUp_Transaction from './transactions/MoveItemUp_Transaction.js'
+import MoveItemDown_Transaction from './transactions/MoveItemDown_Transaction.js'
+import CloseItem_Transaction from './transactions/CloseItem_Transaction.js'
+import TaskChanged_Transaction from './transactions/TaskChanged_Transaction.js'
+import DateChanged_Transaction from './transactions/DateChanged_Transaction.js'
+import StatusChanged_Transaction from './transactions/StatusChanged_Transaction.js'
 
 /**
  * ToDoModel
@@ -28,7 +33,15 @@ export default class ToDoModel {
         // WE'LL USE THIS TO ASSIGN ID NUMBERS TO EVERY LIST ITEM
         this.nextListItemId = 0;
         
-        this.activeItem = null;
+        this.activeItem = 0;
+        
+        this.removed = "";
+        
+        this.afterRemoved = "";
+        
+        this.lastTask = "";
+        
+        this.taskItem = "";
     }
     closeList(){
         if(document.getElementById("close-list-button").getAttribute("name")=="enabled"){
@@ -42,17 +55,34 @@ export default class ToDoModel {
     }
     }
     moveItemUpTransaction(id){
-        if(document.getElementById("todo-list-item-"+id)!=null){
-            console.log("hi");
-            document.getElementById("todo-list-item-"+id).after(document.getElementById("todo-list-item-"+id).previousSibling);
-            let transaction = new MoveItemUp_Transaction(this);
+            let transaction = new MoveItemUp_Transaction(this,id);
             this.tps.addTransaction(transaction);
-            this.activeItem = this.currentList.getItemAtIndex(id);
-            this.moveItemUp();
+        document.getElementById("undo-button").setAttribute("name","enabled");
     }
+    moveItemDownTransaction(id){
+            let transaction = new MoveItemDown_Transaction(this,id);
+            this.tps.addTransaction(transaction);
+        document.getElementById("undo-button").setAttribute("name","enabled");
     }
-    moveItemUp(){
-        return this.activeItem;
+    closeItemTransaction(id){
+            let transaction = new CloseItem_Transaction(this,id);
+            this.tps.addTransaction(transaction);
+        document.getElementById("undo-button").setAttribute("name","enabled");
+    }
+    taskChangedTransaction(id){
+        let transaction = new TaskChanged_Transaction(this,id);
+            this.tps.addTransaction(transaction);
+        document.getElementById("undo-button").setAttribute("name","enabled");
+    }
+    dateChangedTransaction(id){
+        let transaction = new DateChanged_Transaction(this,id);
+            this.tps.addTransaction(transaction);
+        document.getElementById("undo-button").setAttribute("name","enabled");
+    }
+    statusChangedTransaction(id){
+        let transaction = new StatusChanged_Transaction(this,id);
+            this.tps.addTransaction(transaction);
+        document.getElementById("undo-button").setAttribute("name","enabled");
     }
     /**
      * addItemToCurrentList
@@ -62,7 +92,7 @@ export default class ToDoModel {
      * @param {*} itemToAdd A instantiated item to add to the list.
      */
     addItemToCurrentList(itemToAdd) {
-        this.currentList.push(itemToAdd);
+        this.currentList.addItem(itemToAdd);
     }
 
     /**
@@ -100,6 +130,7 @@ export default class ToDoModel {
     addNewItemTransaction() {
         let transaction = new AddNewItem_Transaction(this);
         this.tps.addTransaction(transaction);
+        document.getElementById("undo-button").setAttribute("name","enabled");
     }
 
     /**
@@ -114,10 +145,8 @@ export default class ToDoModel {
         let newList = new ToDoList(this.nextListId++);
         if (initName)
             newList.setName(initName);
-    if(document.getElementById("add-list-button").getAttribute("name")=="enabled"){
         this.toDoLists.push(newList);
         this.view.appendNewListToView(newList);
-    }
         return newList;
     }
 
@@ -170,6 +199,7 @@ export default class ToDoModel {
      */
     redo() {
         if (this.tps.hasTransactionToRedo()) {
+            document.getElementById("undo-button").setAttribute("name","enabled");
             this.tps.doTransaction();
             if (this.tps.hasTransactionToRedo()){
                 document.getElementById("redo-button").setAttribute("name","enabled");
@@ -216,6 +246,7 @@ export default class ToDoModel {
      */
     undo() {
         if (this.tps.hasTransactionToUndo()) {
+            document.getElementById("redo-button").setAttribute("name","enabled");
             this.tps.undoTransaction();
             if(this.tps.hasTransactionToUndo()){
                 document.getElementById("undo-button").setAttribute("name","enabled");

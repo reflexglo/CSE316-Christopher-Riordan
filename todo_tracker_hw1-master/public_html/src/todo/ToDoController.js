@@ -33,7 +33,17 @@ export default class ToDoController {
     setUpControls(){
         let appModel = this.model;
         for(let setItem of appModel.currentList.items){
-            document.getElementById("task-input-"+setItem.getId()).onmousedown = appModel.moveItemUpTransaction(setItem.getId());
+                document.getElementById("up-arrow-"+setItem.getId()).onclick = function(){appModel.moveItemUpTransaction(setItem.getId())};
+                document.getElementById("down-arrow-"+setItem.getId()).onclick = function(){appModel.moveItemDownTransaction(setItem.getId())};
+                document.getElementById("close-item-"+setItem.getId()).onclick = function(){appModel.closeItemTransaction(setItem.getId())};
+        }
+    }
+    setUpInfo(){
+        let appModel = this.model;
+        for(let setItem of appModel.currentList.items){
+                document.getElementById("task-input-"+setItem.getId()).onclick = function(){appModel.taskChangedTransaction(setItem.getId())};
+                document.getElementById("date-input-"+setItem.getId()).onclick = function(){appModel.dateChangedTransaction(setItem.getId())};
+                document.getElementById("status-input-"+setItem.getId()).onclick = function(){appModel.statusChangedTransaction(setItem.getId())};
         }
     }
     saveItemInfo(appModel){

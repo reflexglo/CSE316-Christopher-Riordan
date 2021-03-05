@@ -77,4 +77,38 @@ export default class ToDoList {
     getItemAtIndex(index) {
         return this.items[index];
     }
+    getItemById(itemId){
+        for(let nextItem of this.items){
+            if(nextItem.id == itemId){
+               return nextItem;
+               }
+        }
+        return null;
+    }
+    addItemBefore(index,itemToAdd){
+        if(index<this.items.length){
+            let temp = null;
+            let length = this.items.length+1;
+            for(let i = 0;i<length;i++){
+                if(i == index){
+                    temp = this.items[index];
+                    this.items[index] = itemToAdd;
+               }
+                if(i>index){
+                    let newTemp = this.items[index];
+                    if(i == length-1){
+                        this.items.push(temp);
+                    }
+                else{
+                    this.items[i] = temp;
+                }
+                temp = newTemp;
+               }
+            
+        }
+    }
+        else{
+            this.items.push(itemToAdd);
+        }
+    }
 }

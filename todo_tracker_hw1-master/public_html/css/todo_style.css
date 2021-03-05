@@ -17,6 +17,7 @@
 }
 body{
     background-color: var(--swatch-foundation);
+    font-family: var(--font-primary);
 }
 #grid-container {
     font-family: var(--font-primary);
@@ -60,7 +61,7 @@ body{
 #todo-lists-list{
     padding: 30px;
     background-color: #353a44;
-    font-size: 100%;
+    font-size: 125%;
 }
 .list-header-card {
     border-bottom: dotted;
@@ -81,11 +82,15 @@ body{
 .todo_button:first-child:not(#add-list-button,#task-col-header){
     background-color: dimgray
 }
+
 #add-list-button[name="disabled"],#undo-button[name="disabled"],#redo-button[name="disabled"]{
     background-color: royalblue;
 }
 #add-item-button[name="disabled"],#delete-list-button[name="disabled"],#close-list-button[name="disabled"]{
     display: none;
+}
+[value="disabled"]{
+    visibility: hidden;
 }
 .list-item-card:not(#todo-list-header-card){
     padding-top: 30px;
@@ -94,7 +99,34 @@ body{
 .list-item-card:hover:not(#todo-list-header-card){
     background-color: #111111;
 }
-[name="up-arrow"]:hover{
+[name="up-arrow"]:hover,[name="down-arrow"]:hover{
     cursor:pointer;
     background-color: gray
+}
+[name="task-input"],[name="date-input"]{
+    color:white;
+    border-style: hidden;
+    background-color: #40454e;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 125%;
+}
+[value="complete"]{
+    color:skyblue;
+    border-style: hidden;
+    background-color: #40454e;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 125%;
+}
+[value="incomplete"]{
+    color:yellow;
+    border-style: hidden;
+    background-color: #40454e;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 125%;
+}
+#task-col-header,#date-col-header,#status-col-header{
+    font-size: 125%;
 }

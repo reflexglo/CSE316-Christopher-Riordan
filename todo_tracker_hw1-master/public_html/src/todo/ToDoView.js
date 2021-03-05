@@ -60,20 +60,94 @@ export default class ToDoView {
         for (let i = 0; i < list.items.length; i++) {
             // NOW BUILD ALL THE LIST ITEMS
             let listItem = list.items[i];
-            let listItemElement = "<div id='todo-list-item-" + listItem.id + "' class='list-item-card'>"
+            let listItemElement = "";
+            if(listItem.getStatus()=="complete"){
+               if(i == 0){
+               listItemElement = "<div id='todo-list-item-" + listItem.id + "' class='list-item-card' name='item'>"
                                 + "<div class='task-col'><input type='text' id='task-input-"+listItem.id+"' name='task-input' value='"+listItem.description+"'></div>"
                                 + "<div class='due-date-col'><input type='date' id='date-input-"+listItem.id+"' name='date-input' value='"+listItem.dueDate+"'></div>"
                                 + "<div class='status-col'><select id='status-input-"+listItem.id+"' name='status-input' value='"+listItem.status+"'><option value='complete'>complete</option><option value='incomplete'>incomplete</option></select></div>"
                                 + "<div class='list-controls-col'>"
-                                + " <div name='up-arrow' id='up-arrow-"+listItem.id+"' class='list-item-control material-icons'>keyboard_arrow_up</div>"
-                                + " <div class='list-item-control material-icons'>keyboard_arrow_down</div>"
-                                + " <div class='list-item-control material-icons'>close</div>"
+                                + " <div value='disabled' name='up-arrow' id='up-arrow-"+listItem.id+"' class='list-item-control material-icons'>keyboard_arrow_up</div>"
+                                + " <div value='enabled' name='down-arrow' id='down-arrow-"+listItem.id+"' class='list-item-control material-icons'>keyboard_arrow_down</div>"
+                                + " <div name='close-item' id='close-item-"+listItem.id+"' class='list-item-control material-icons'>close</div>"
                                 + " <div class='list-item-control'></div>"
                                 + " <div class='list-item-control'></div>"
                                 + "</div>";
+               }
+            else if(i == list.items.length-1){
+                    listItemElement = "<div id='todo-list-item-" + listItem.id + "' class='list-item-card' name='item'>"
+                                + "<div class='task-col'><input type='text' id='task-input-"+listItem.id+"' name='task-input' value='"+listItem.description+"'></div>"
+                                + "<div class='due-date-col'><input type='date' id='date-input-"+listItem.id+"' name='date-input' value='"+listItem.dueDate+"'></div>"
+                                + "<div class='status-col'><select id='status-input-"+listItem.id+"' name='status-input' value='"+listItem.status+"'><option value='complete'>complete</option><option value='incomplete'>incomplete</option></select></div>"
+                                + "<div class='list-controls-col'>"
+                                + " <div value='enabled' name='up-arrow' id='up-arrow-"+listItem.id+"' class='list-item-control material-icons'>keyboard_arrow_up</div>"
+                                + " <div value='disabled' name='down-arrow' id='down-arrow-"+listItem.id+"' class='list-item-control material-icons'>keyboard_arrow_down</div>"
+                                + " <div name='close-item' id='close-item-"+listItem.id+"' class='list-item-control material-icons'>close</div>"
+                                + " <div class='list-item-control'></div>"
+                                + " <div class='list-item-control'></div>"
+                                + "</div>";
+                    }
+            else{
+                listItemElement = "<div id='todo-list-item-" + listItem.id + "' class='list-item-card' name='item'>"
+                                + "<div class='task-col'><input type='text' id='task-input-"+listItem.id+"' name='task-input' value='"+listItem.description+"'></div>"
+                                + "<div class='due-date-col'><input type='date' id='date-input-"+listItem.id+"' name='date-input' value='"+listItem.dueDate+"'></div>"
+                                + "<div class='status-col'><select id='status-input-"+listItem.id+"' name='status-input' value='"+listItem.status+"'><option value='complete'>complete</option><option value='incomplete'>incomplete</option></select></div>"
+                                + "<div class='list-controls-col'>"
+                                + " <div value='enabled' name='up-arrow' id='up-arrow-"+listItem.id+"' class='list-item-control material-icons'>keyboard_arrow_up</div>"
+                                + " <div value='enabled' name='down-arrow' id='down-arrow-"+listItem.id+"' class='list-item-control material-icons'>keyboard_arrow_down</div>"
+                                + " <div name='close-item' id='close-item-"+listItem.id+"' class='list-item-control material-icons'>close</div>"
+                                + " <div class='list-item-control'></div>"
+                                + " <div class='list-item-control'></div>"
+                                + "</div>";
+            }
+               }
+            else{
+                if(i == 0){
+               listItemElement = "<div id='todo-list-item-" + listItem.id + "' class='list-item-card' name='item'>"
+                                + "<div class='task-col'><input type='text' id='task-input-"+listItem.id+"' name='task-input' value='"+listItem.description+"'></div>"
+                                + "<div class='due-date-col'><input type='date' id='date-input-"+listItem.id+"' name='date-input' value='"+listItem.dueDate+"'></div>"
+                                + "<div class='status-col'><select id='status-input-"+listItem.id+"' name='status-input' value='"+listItem.status+"'><option value='incomplete'>incomplete</option><option value='complete'>complete</option></select></div>"
+                                + "<div class='list-controls-col'>"
+                                + " <div value='disabled' name='up-arrow' id='up-arrow-"+listItem.id+"' class='list-item-control material-icons'>keyboard_arrow_up</div>"
+                                + " <div value='enabled' name='down-arrow' id='down-arrow-"+listItem.id+"' class='list-item-control material-icons'>keyboard_arrow_down</div>"
+                                + " <div name='close-item' id='close-item-"+listItem.id+"' class='list-item-control material-icons'>close</div>"
+                                + " <div class='list-item-control'></div>"
+                                + " <div class='list-item-control'></div>"
+                                + "</div>";
+               }
+            else if(i == list.items.length-1){
+                    listItemElement = "<div id='todo-list-item-" + listItem.id + "' class='list-item-card' name='item'>"
+                                + "<div class='task-col'><input type='text' id='task-input-"+listItem.id+"' name='task-input' value='"+listItem.description+"'></div>"
+                                + "<div class='due-date-col'><input type='date' id='date-input-"+listItem.id+"' name='date-input' value='"+listItem.dueDate+"'></div>"
+                                + "<div class='status-col'><select id='status-input-"+listItem.id+"' name='status-input' value='"+listItem.status+"'><option value='incomplete'>incomplete</option><option value='complete'>complete</option></select></div>"
+                                + "<div class='list-controls-col'>"
+                                + " <div value='enabled' name='up-arrow' id='up-arrow-"+listItem.id+"' class='list-item-control material-icons'>keyboard_arrow_up</div>"
+                                + " <div value='disabled' name='down-arrow' id='down-arrow-"+listItem.id+"' class='list-item-control material-icons'>keyboard_arrow_down</div>"
+                                + " <div name='close-item' id='close-item-"+listItem.id+"' class='list-item-control material-icons'>close</div>"
+                                + " <div class='list-item-control'></div>"
+                                + " <div class='list-item-control'></div>"
+                                + "</div>";
+                    }
+            else{
+                listItemElement = "<div id='todo-list-item-" + listItem.id + "' class='list-item-card' name='item'>"
+                                + "<div class='task-col'><input type='text' id='task-input-"+listItem.id+"' name='task-input' value='"+listItem.description+"'></div>"
+                                + "<div class='due-date-col'><input type='date' id='date-input-"+listItem.id+"' name='date-input' value='"+listItem.dueDate+"'></div>"
+                                + "<div class='status-col'><select id='status-input-"+listItem.id+"' name='status-input' value='"+listItem.status+"'><option value='incomplete'>incomplete</option><option value='complete'>complete</option></select></div>"
+                                + "<div class='list-controls-col'>"
+                                + " <div value='enabled' name='up-arrow' id='up-arrow-"+listItem.id+"' class='list-item-control material-icons'>keyboard_arrow_up</div>"
+                                + " <div value='enabled' name='down-arrow' id='down-arrow-"+listItem.id+"' class='list-item-control material-icons'>keyboard_arrow_down</div>"
+                                + " <div name='close-item' id='close-item-"+listItem.id+"' class='list-item-control material-icons'>close</div>"
+                                + " <div class='list-item-control'></div>"
+                                + " <div class='list-item-control'></div>"
+                                + "</div>";
+            }
+            }
+            
             itemsListDiv.innerHTML += listItemElement;
         }
         this.controller.setUpControls();
+        this.controller.setUpInfo();
     }
 
     // THE VIEW NEEDS THE CONTROLLER TO PROVIDE PROPER RESPONSES

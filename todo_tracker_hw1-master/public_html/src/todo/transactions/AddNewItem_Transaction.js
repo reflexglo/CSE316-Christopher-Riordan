@@ -17,5 +17,6 @@ export default class AddNewItem_Transaction extends jsTPS_Transaction {
 
     undoTransaction() {
         this.model.removeItem(this.itemAdded.id);
+        document.getElementById("redo-button").setAttribute("name","enabled");
     }
 }
