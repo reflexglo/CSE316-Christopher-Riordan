@@ -68,7 +68,7 @@ class App extends Component {
   // WILL LOAD THE SELECTED LIST
   loadToDoList = (toDoList) => {
     console.log("loading " + toDoList);
-
+    this.tps.clearAllTransactions();
     // MAKE SURE toDoList IS AT THE TOP OF THE STACK BY REMOVING THEN PREPENDING
     const nextLists = this.state.toDoLists.filter(testList =>
       testList.id !== toDoList.id
