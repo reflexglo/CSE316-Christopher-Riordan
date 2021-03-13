@@ -270,6 +270,23 @@ class App extends Component {
       this.tps.doTransaction();
     }
   }
+  undoStatus = () => {
+    if (this.tps.hasTransactionToUndo()) {
+      return "enabled";
+    }
+    else{
+      return "disabled";
+    }
+  }
+  redoStatus = () => {
+    if (this.tps.hasTransactionToRedo()) {
+      return "enabled";
+    }
+    else{
+      return "disabled";
+    }
+  }
+
 
   nothing = () => {
 
@@ -316,6 +333,8 @@ class App extends Component {
         changeStatusCallBack={this.changeStatusTransaction}
         undoCallBack={this.undo}
         redoCallBack={this.redo}
+        undoStatus={this.undoStatus}
+        redoStatus={this.redoStatus}
         />
       </div>
     );
