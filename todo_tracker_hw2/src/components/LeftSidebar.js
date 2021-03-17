@@ -11,6 +11,14 @@ class LeftSidebar extends Component {
     handleAddNewList = () => {
         this.props.addNewListCallback();
     }
+    handleAddButton = () => {
+        if(this.props.selectedList.name==undefined){
+            return "enabled";
+        }
+        else{
+            return "disabled";
+        }
+    }
 
     render() {
         return (
@@ -21,7 +29,9 @@ class LeftSidebar extends Component {
                         <AddBox 
                             id="add-list-button"
                             className="material-icons todo_button"
-                            onClick={this.handleAddNewList} />
+                            onClick={this.handleAddNewList} 
+                            value={this.handleAddButton()}
+                            />
                     </span>
                 </div>
                 <div id="todo-lists-list">

@@ -93,7 +93,9 @@ class App extends Component {
   }
 
   addNewList = () => {
-    let newToDoListInList = [this.makeNewToDoList()];
+    console.log(this.state.currentList.name);
+    if(this.state.currentList.name==undefined){
+      let newToDoListInList = [this.makeNewToDoList()];
     let newToDoListsList = [...newToDoListInList, ...this.state.toDoLists];
     let newToDoList = newToDoListInList[0];
     newToDoList.id = this.state.nextListId;
@@ -104,6 +106,8 @@ class App extends Component {
       nextListId: this.state.nextListId+1
     }, this.afterToDoListsChangeComplete);
     this.forceUpdate();
+    }
+    
   }
 
   addNewItemTransaction = () => {

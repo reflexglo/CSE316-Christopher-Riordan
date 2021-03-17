@@ -112,8 +112,12 @@
     background-color: var(--swatch-contrast);
 }
 
-#add-list-button {
+#add-list-button[value="enabled"]{
     color: var(--swatch-accent);
+    cursor:pointer;
+}
+#add-list-button[value="disabled"] {
+    color:gray;
     cursor:pointer;
 }
 
