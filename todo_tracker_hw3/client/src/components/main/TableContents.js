@@ -7,11 +7,12 @@ const TableContents = (props) => {
     return (
         entries ? <div className=' table-entries container-primary'>
             {
-                entries.map((entry, index) => (
+                entries.map((entry) => (
                     <TableEntry
                         data={entry} key={entry.id}
                         deleteItem={props.deleteItem} reorderItem={props.reorderItem}
                         editItem={props.editItem}
+                        listLength={entries.length} index={entries.indexOf(entry)}
                     />
                 ))
             }

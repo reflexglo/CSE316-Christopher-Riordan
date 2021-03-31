@@ -55,6 +55,14 @@ const Homescreen = (props) => {
 		}
 	}
 
+	const hasUndo =  () => {
+		return props.tps.hasTransactionToUndo();
+	}
+
+	const hasRedo =  () => {
+		return props.tps.hasTransactionToRedo();
+	}
+
 	const tpsUndo = async () => {
 		const retVal = await props.tps.undoTransaction();
 		refetchTodos(refetch);
@@ -139,26 +147,33 @@ const Homescreen = (props) => {
 		}
 		const { data } = await AddTodolist({ variables: { todolist: list }, refetchQueries: [{ query: GET_DB_TODOS }] });
 		setActiveList(list)
+		props.tps.clearAllTransactions();
 	};
 
 	const deleteList = async (_id) => {
 		DeleteTodolist({ variables: { _id: _id }, refetchQueries: [{ query: GET_DB_TODOS }] });
 		refetch();
 		setActiveList({});
+		props.tps.clearAllTransactions();
 	};
 
 	const updateListField = async (_id, field, value, prev) => {
 		let transaction = new UpdateListField_Transaction(_id, field, prev, value, UpdateTodolistField);
 		props.tps.addTransaction(transaction);
 		tpsRedo();
-
 	};
 
 	const handleSetActive = (id) => {
+		if(id != activeList.id){
+			props.tps.clearAllTransactions();
+		}
 		const todo = todolists.find(todo => todo.id === id || todo._id === id);
 		setActiveList(todo);
 	};
-
+	const closeList = () => {
+		props.tps.clearAllTransactions();
+		setActiveList({});
+	}
 	
 	/*
 		Since we only have 3 modals, this sort of hardcoding isnt an issue, if there
@@ -211,6 +226,7 @@ const Homescreen = (props) => {
 								handleSetActive={handleSetActive} createNewList={createNewList}
 								undo={tpsUndo} redo={tpsRedo}
 								updateListField={updateListField}
+								activeName={activeList.name} active_id={activeList._id}
 							/>
 							:
 							<></>
@@ -226,6 +242,9 @@ const Homescreen = (props) => {
 									editItem={editItem} reorderItem={reorderItem}
 									setShowDelete={setShowDelete}
 									activeList={activeList} setActiveList={setActiveList}
+									undo={tpsUndo} redo={tpsRedo}
+									hasRedo={hasRedo()} hasUndo={hasUndo()}
+									closeList={closeList}
 								/>
 							</div>
 						:

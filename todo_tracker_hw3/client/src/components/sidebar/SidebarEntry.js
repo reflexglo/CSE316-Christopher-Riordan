@@ -18,7 +18,6 @@ const SidebarEntry = (props) => {
     };
 
     const entryStyle = props.id === props.activeid ? 'list-item list-item-active' : 'list-item ';
-    
     return (
         <WNavItem 
             className={entryStyle} onDoubleClick={handleEditing} 

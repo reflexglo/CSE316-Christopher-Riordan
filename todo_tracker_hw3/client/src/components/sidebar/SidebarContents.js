@@ -7,12 +7,12 @@ const SidebarContents = (props) => {
         <>
             <SidebarHeader 
                 auth={props.auth} createNewList={props.createNewList} 
-                undo={props.undo} redo={props.redo} 
             />
             <SidebarList
                 activeid={props.activeid} handleSetActive={props.handleSetActive}
                 todolists={props.todolists} createNewList={props.createNewList}
                 updateListField={props.updateListField}
+                activeName={props.activeName} active_id={props.active_id}
             />
         </>
     );

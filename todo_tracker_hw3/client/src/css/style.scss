@@ -63,6 +63,7 @@ html, body {
 
 .list-item-active {
     background-color: var(--deep-blue);
+    color: yellow;
 }
 
 .list-item {
@@ -185,10 +186,21 @@ html, body {
     color: $text-color;
 }
 
-.undo-redo {
+.has-undo-redo {
     color: $text-color;
 }
+.not-undo-redo {
+    color: var(--warm-black);
+}
+
 
 .table-entry-buttons {
     color: $text-color;
+}
+
+.complete-assign{
+    background-color: black;
+}
+.incomplete-assign{
+    background-color: red;
 }
