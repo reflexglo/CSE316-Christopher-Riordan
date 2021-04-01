@@ -43,7 +43,6 @@ const TableEntry = (props) => {
         const prevAssign = assigned_to;
         props.editItem(data._id, 'assigned_to',newAssign,prevAssign);
     }
-    console.log(props.listLength);
     return (
         <WRow className='table-entry'>
             <WCol size="3">

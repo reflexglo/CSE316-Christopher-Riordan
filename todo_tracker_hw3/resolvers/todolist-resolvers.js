@@ -163,6 +163,107 @@ module.exports = {
 			listItems = found.items;
 			return (found.items);
 
+		},
+		sortItems: async (_, args) => {
+			const {_id, filter, direction} = args;
+			const listId = new ObjectId(_id);
+			const found = await Todolist.findOne({_id: listId});
+			let listItems = found.items;
+			if(filter == "desc"){
+				for(let i = 0;i<listItems.length;i++){
+					for(let j = 0;j<listItems.length-1;j++){
+						let thisFilter = listItems[j].description;
+						let nextFilter = listItems[j+1].description;
+						if(direction == 1){
+							if(thisFilter.localeCompare(nextFilter)>=0){
+								let temp = nextFilter;
+								listItems[j+1].description = thisFilter;
+								listItems[j].description = temp;
+							}
+						}
+						else{
+							if(thisFilter.localeCompare(nextFilter)<0){
+								let temp = nextFilter;
+								listItems[j+1].description = thisFilter;
+								listItems[j].description = temp;
+							}
+						}
+					}
+				}
+			}
+			if(filter == "date"){
+				for(let i = 0;i<listItems.length;i++){
+					for(let j = 0;j<listItems.length-1;j++){
+						let thisFilter = listItems[j].due_date;
+						let nextFilter = listItems[j+1].due_date;
+						if(direction == 1){
+							if(thisFilter.localeCompare(nextFilter)>=0){
+								let temp = nextFilter;
+								listItems[j+1].due_date = thisFilter;
+								listItems[j].due_date = temp;
+							}
+						}
+						else{
+							if(thisFilter.localeCompare(nextFilter)<0){
+								let temp = nextFilter;
+								listItems[j+1].due_date = thisFilter;
+								listItems[j].due_date = temp;
+							}
+						}
+					}
+				}
+			}
+			if(filter == "status"){
+				for(let i = 0;i<listItems.length;i++){
+					for(let j = 0;j<listItems.length-1;j++){
+						let thisFilter = listItems[j].completed;
+						let nextFilter = listItems[j+1].completed;
+						if(direction == 1){
+							if(thisFilter == true && nextFilter == false){
+								let temp = nextFilter;
+								listItems[j+1].completed = thisFilter;
+								listItems[j].completed = temp;
+							}
+						}
+						else{
+							if(thisFilter == false && nextFilter == true){
+								let temp = nextFilter;
+								listItems[j+1].completed = thisFilter;
+								listItems[j].completed = temp;
+							}
+						}
+					}
+				}
+			}
+			if(filter == "assign"){
+				for(let i = 0;i<listItems.length;i++){
+					for(let j = 0;j<listItems.length-1;j++){
+						let thisFilter = listItems[j].assigned_to;
+						let nextFilter = listItems[j+1].assigned_to;
+						if(direction == 1){
+							if(thisFilter.localeCompare(nextFilter)>=0){
+								let temp = nextFilter;
+								listItems[j+1].assigned_to = thisFilter;
+								listItems[j].assigned_to = temp;
+							}
+						}
+						else{
+							if(thisFilter.localeCompare(nextFilter)<0){
+								let temp = nextFilter;
+								listItems[j+1].assigned_to = thisFilter;
+								listItems[j].assigned_to = temp;
+							}
+						}
+					}
+				}
+			}
+				const updated = await Todolist.updateOne({_id: listId}, { items: listItems });
+				if(updated){
+					return true;
+				}
+				else{
+					return false;
+				}
 		}
 
 	}

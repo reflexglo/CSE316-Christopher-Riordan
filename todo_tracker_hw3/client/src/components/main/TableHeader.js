@@ -12,18 +12,18 @@ const TableHeader = (props) => {
     return (
         <WRow className="table-header">
             <WCol size="3">
-                <WButton className='table-header-section' wType="texted" >Task</WButton>
+                <WButton className='table-header-section' wType="texted" onClick={props.sortByTask}>Task</WButton>
             </WCol>
 
             <WCol size="2">
-                <WButton className='table-header-section' wType="texted">Due Date</WButton>
+                <WButton className='table-header-section' wType="texted" onClick={props.sortByDate}>Due Date</WButton>
             </WCol>
 
             <WCol size="2">
-                <WButton className='table-header-section' wType="texted" >Status</WButton>
+                <WButton className='table-header-section' wType="texted" onClick={props.sortByStatus}>Status</WButton>
             </WCol>
             <WCol size="2">
-                <WButton className='table-header-section' wType="texted" >Assigned To</WButton>
+                <WButton className='table-header-section' wType="texted" onClick={props.sortByAssign}>Assigned To</WButton>
             </WCol>
             <WCol size="2">
                 <div className="table-header-buttons">

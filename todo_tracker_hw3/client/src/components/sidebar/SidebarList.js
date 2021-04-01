@@ -6,13 +6,12 @@ const SidebarList = (props) => {
         <>
 
             {
-                props.activeName != undefined ?
+                props.activeName != undefined &&
                 <SidebarEntry
                 handleSetActive={props.handleSetActive} activeid={props.activeid}
                 id={props.activeid} key={props.activeid} name={props.activeName} _id={props.active_id}
                 updateListField={props.updateListField}
                 />
-                :<div></div>
             }
             {
                 

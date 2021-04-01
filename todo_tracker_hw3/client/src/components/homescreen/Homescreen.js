@@ -14,7 +14,8 @@ import { WLayout, WLHeader, WLMain, WLSide } from 'wt-frontend';
 import { UpdateListField_Transaction, 
 	UpdateListItems_Transaction, 
 	ReorderItems_Transaction, 
-	EditItem_Transaction } 				from '../../utils/jsTPS';
+	EditItem_Transaction, 
+	SortListItems_Transaction} 				from '../../utils/jsTPS';
 import WInput from 'wt-frontend/build/components/winput/WInput';
 
 
@@ -25,6 +26,10 @@ const Homescreen = (props) => {
 	const [showDelete, toggleShowDelete] 	= useState(false);
 	const [showLogin, toggleShowLogin] 		= useState(false);
 	const [showCreate, toggleShowCreate] 	= useState(false);
+	const [taskSort, toggleTaskSort]        = useState(false);
+	const [dateSort, toggleDateSort]        = useState(false);
+	const [statusSort, toggleStatusSort]    = useState(false);
+	const [assignSort, toggleAssignSort]      = useState(false);
 
 	const [ReorderTodoItems] 		= useMutation(mutations.REORDER_ITEMS);
 	const [UpdateTodoItemField] 	= useMutation(mutations.UPDATE_ITEM_FIELD);
@@ -33,6 +38,7 @@ const Homescreen = (props) => {
 	const [DeleteTodoItem] 			= useMutation(mutations.DELETE_ITEM);
 	const [AddTodolist] 			= useMutation(mutations.ADD_TODOLIST);
 	const [AddTodoItem] 			= useMutation(mutations.ADD_ITEM);
+	const [SortItems]               = useMutation(mutations.SORT_ITEMS);
 
 
 	const { loading, error, data, refetch } = useQuery(GET_DB_TODOS);
@@ -132,8 +138,63 @@ const Homescreen = (props) => {
 		let transaction = new ReorderItems_Transaction(listID, itemID, dir, ReorderTodoItems);
 		props.tps.addTransaction(transaction);
 		tpsRedo();
-
 	};
+
+	const sortByTask = async () => {
+		let listID = activeList._id;
+		let prevOrder = activeList;
+		let filter = "desc";
+		let dir = taskSort ? -1 : 1;
+		let transaction = new SortListItems_Transaction(listID,prevOrder,filter,dir,SortItems);
+		props.tps.addTransaction(transaction);
+		tpsRedo();
+		toggleTaskSort(!taskSort);
+		toggleDateSort(false);
+		toggleStatusSort(false);
+		toggleAssignSort(false);
+	}
+
+	const sortByDate = async () => {
+		let listID = activeList._id;
+		let prevOrder = activeList;
+		let filter = "date";
+		let dir = dateSort ? -1 : 1;
+		let transaction = new SortListItems_Transaction(listID,prevOrder,filter,dir,SortItems);
+		props.tps.addTransaction(transaction);
+		tpsRedo();
+		toggleTaskSort(false);
+		toggleDateSort(!dateSort);
+		toggleStatusSort(false);
+		toggleAssignSort(false);
+	}
+
+	const sortByStatus = async () => {
+		let listID = activeList._id;
+		let prevOrder = activeList;
+		let filter = "status";
+		let dir = statusSort ? -1 : 1;
+		let transaction = new SortListItems_Transaction(listID,prevOrder,filter,dir,SortItems);
+		props.tps.addTransaction(transaction);
+		tpsRedo();
+		toggleTaskSort(false);
+		toggleDateSort(false);
+		toggleStatusSort(!statusSort);
+		toggleAssignSort(false);
+	}
+
+	const sortByAssign = async () => {
+		let listID = activeList._id;
+		let prevOrder = activeList;
+		let filter = "assign";
+		let dir = assignSort ? -1 : 1;
+		let transaction = new SortListItems_Transaction(listID,prevOrder,filter,dir,SortItems);
+		props.tps.addTransaction(transaction);
+		tpsRedo();
+		toggleTaskSort(false);
+		toggleDateSort(false);
+		toggleStatusSort(false);
+		toggleAssignSort(!assignSort);
+	}
 
 	const createNewList = async () => {
 		const length = todolists.length
@@ -245,6 +306,8 @@ const Homescreen = (props) => {
 									undo={tpsUndo} redo={tpsRedo}
 									hasRedo={hasRedo()} hasUndo={hasUndo()}
 									closeList={closeList}
+									sortByTask={sortByTask} sortByDate={sortByDate}
+									sortByStatus={sortByStatus} sortByAssign={sortByAssign}
 								/>
 							</div>
 						:

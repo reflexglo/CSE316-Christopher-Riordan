@@ -47,6 +47,25 @@ export class ReorderItems_Transaction extends jsTPS_Transaction {
     
 }
 
+export class SortListItems_Transaction extends jsTPS_Transaction {
+    constructor(listID, todolist, filter, dir, callback){
+        super();
+        this.listID = listID;
+        this.prevOrder = todolist;
+        this.filter = filter;
+        this.dir = dir;
+        this.updateFunction = callback;
+    }
+
+    async doTransaction() {
+        const {data} = await this.updateFunction({variables:{_id: this.listID, filter: this.filter, direction: this.dir}})
+        return data;
+    }
+    async undoTransaction() {
+        
+    }
+}
+
 export class EditItem_Transaction extends jsTPS_Transaction {
 	constructor(listID, itemID, field, prev, update, flag, callback) {
 		super();
@@ -191,6 +210,7 @@ export class jsTPS {
         if (this.hasTransactionToRedo()) {   
             this.performingDo = true;
             let transaction = this.transactions[this.mostRecentTransaction+1];
+            console.log(transaction);
 			retVal = await transaction.doTransaction();
 			this.mostRecentTransaction++;
 			this.performingDo = false;
