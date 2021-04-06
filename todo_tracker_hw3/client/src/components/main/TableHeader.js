@@ -1,4 +1,5 @@
 import React from 'react';
+import Hotkeys from 'react-hot-keys';
 
 import { WButton, WRow, WCol } from 'wt-frontend';
 
@@ -29,6 +30,16 @@ const TableHeader = (props) => {
             </WCol>
             <WCol size="2">
             <div className={`${divStyle}`}>
+                <Hotkeys 
+                                keyName="ctrl+z" 
+                                onKeyDown={props.undo}
+                            >
+                </Hotkeys>
+                <Hotkeys 
+                                keyName="ctrl+y" 
+                                onKeyDown={props.redo}
+                            >
+                </Hotkeys>
                 <WButton className={`${undoStyle}`} onClick={props.undo} wType="texted" clickAnimation="ripple-light" shape="rounded">
                             <i className="material-icons">undo</i>
                         </WButton>
