@@ -227,6 +227,7 @@ html, body {
 .navbar-icon{
     color: red;
     text-align: center;
+    cursor: pointer;
 }
 .welcome{
     color: white;
@@ -279,6 +280,10 @@ html, body {
     font-size: 30px;
     color: black;
 }
+.map-entry:hover{
+    cursor: pointer;
+    background-color: gray;
+}
 .active-text{
     font-size: 30px;
     color: blue;
@@ -315,5 +320,109 @@ html, body {
     text-align: center;
 }
 .region-list-main{
-    background-color: var(--light-gray);;
+    background-color: var(--light-gray);
+    width: 100%;
+    height: 50%;
+    overflow-y: scroll;
+}
+.region-entry{
+    border: black;
+    border-style: solid;
+    border-radius: 3px;
+    background-color: white;
+    margin-right: 5%;
+    margin-left: 5%;
+}
+.active-region{
+    list-style: none;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: darkkhaki;
+}
+.item-region{
+    list-style: none;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.item-region:hover{
+    background-color: darkcyan;
+    cursor: pointer;
+}
+.region-select{
+    width:100%;
+    background-color: red;
+    display:block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.select-region-text{
+    text-align: center;
+    color: white;
+}
+.path-name{
+    color:white;
+    background-color: black;
+}
+.path-name:hover{
+    background-color: darkcyan;
+}
+.path-arrow{
+    font-size: 30px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.region-viewer-header{
+    background-color: $background-color;
+    width: 10%;
+}
+.region-viewer-do{
+    width:100%;
+}
+.region-viewer-main{
+    margin-left: 5%;
+    padding-top: 20px;
+    color:white;
+    font-size: 20px;
+}
+.landmarks-header{
+    margin-top: 30px;
+    color: white;
+    font-size: 20px;
+    text-align: center;
+}
+.landmarks-list{
+    background-color: black;
+    overflow-y: scroll;
+}
+.landmarks-footer{
+    width: 100%;
+    height: 50%;
+    background-color: darkcyan;
+}
+.add-landmark{
+    width:100%;
+    background-color: darkcyan;
+    color: greenyellow;
+    text-align: center;
+    font-size: 30px;
+    height: 50%;
+}
+.landmarks-input{
+    background-color: lightcyan;
+    color:black;
+    height: 50%;
+    width: 100%;
+}
+.return-spreadsheet{
+    width: 75%;
+    background-color: red;
+    margin-top: 20px;
+    display:block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.return-text{
+    color: white;
+    text-align: center;
+    font-size: 20px;
 }

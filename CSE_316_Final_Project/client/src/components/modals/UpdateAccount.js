@@ -23,21 +23,16 @@ const CreateAccount = (props) => {
 				return;
 			}
 		}
-		const { loading, error, data } = await UPDATE_LOGIN({ variables: { ...input } });
+		const { loading, error, data } = await UpdateLogin({ variables: { ...input, _id: props.user._id } });
 		if (loading) { toggleLoading(true) };
 		if (error) { return `Error: ${error.message}` };
 		if (data) {
-			console.log(data)
-			toggleLoading(false);
-			if(data.register.email === 'already exists') {
-				alert('User with that email already registered');
+			props.fetchUser();
 			}
 			else {
 				props.fetchUser();
 			}
 			props.setShowUpdate(false);
-
-		};
 	};
 
 	return (

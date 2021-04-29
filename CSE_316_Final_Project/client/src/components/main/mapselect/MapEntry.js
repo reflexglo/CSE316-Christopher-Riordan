@@ -24,7 +24,7 @@ const MapEntry = (props) => {
 
     return(
         <WNavItem
-            onDoubleClick={handleEditing} onClick={() => props.setActiveMap(props.map)}
+            onDoubleClick={handleEditing} onClick={() => props.setActiveMap(props.map)} className="map-entry"
         >
             {
                 editing ? 

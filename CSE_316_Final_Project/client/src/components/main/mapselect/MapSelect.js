@@ -12,6 +12,26 @@ import WButton from 'wt-frontend/build/components/wbutton/WButton';
 
 
 const MapSelect = (props) => {
+    const [mapLength, setMapLength] = useState(0);
+    const [addedMap, setAddedMap] = useState(false);
+    if(addedMap){
+        if(mapLength>props.maps.length){
+            props.refetch();
+        }
+        else{
+            setAddedMap(false);
+        }
+    }
+    else{
+        if(mapLength>props.maps.length){
+            setMapLength(props.maps.length);
+        }
+    }
+    const handleAdding = () => {
+        props.addNewMap();
+        setMapLength(props.maps.length+1);
+        setAddedMap(true);
+    }
     return(
         <>
         <WLayout>
@@ -38,7 +58,7 @@ const MapSelect = (props) => {
                 </WCol>
                 <WCol size="6">
                     <img className="map-logo" src={logo}></img>
-                    <WButton className="add-map" onClick={props.addNewMap}>
+                    <WButton className="add-map" onClick={handleAdding}>
                         <div className="addmap-text">
                             Create New Map
                         </div>

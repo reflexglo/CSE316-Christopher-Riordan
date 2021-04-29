@@ -11,6 +11,10 @@ regionSchema.add(
 			type: Number,
 			required: true
 		},
+		owner: {
+			type: String,
+			required: true
+		},
 		name: {
 			type: String,
 			required: true
@@ -22,6 +26,7 @@ regionSchema.add(
 			type: String,
 		},
 		landmarks: [String],
+		subregions: [String]
 	}
 );
 

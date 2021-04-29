@@ -1,5 +1,6 @@
 const ObjectId = require('mongoose').Types.ObjectId;
 const Map = require('../models/map-model');
+const Region = require('../models/region-model');
 module.exports = {
     Query: {
 		getAllMaps: async (_, __, { req }) => {
@@ -46,6 +47,34 @@ module.exports = {
 			const updated = await Map.updateOne({_id: objectId}, {[field]: value});
 			if(updated) return value;
 			else return "";
+		},
+		addRegion: async(_, args) => {
+			const { _id, region , index } = args;
+			const mapId = new ObjectId(_id);
+			const objectId = new ObjectId();
+			const found = await Map.findOne({_id: mapId});
+			if(!found) return ('Map not found');
+			if(region._id === '') region._id = objectId;
+			let mapRegions = found.regions;
+			if(index < 0) mapRegions.push(region._id);
+   			else mapRegions.splice(index, 0, region._id);
+
+			const newRegion = new Region({
+				_id: region._id,
+				id: region.id,
+				owner: region.owner,
+				name: region.name,
+				capital: region.capital,
+				leader: region.leader,
+				landmarks: region.landmarks,
+				subregions: region.subregions
+			});
+			newRegion.save();
+			
+			const updated = await Map.updateOne({_id: mapId}, { regions: mapRegions });
+
+			if(updated) return (region._id);
+			else return ('Could not add region');
 		}
     }
 }

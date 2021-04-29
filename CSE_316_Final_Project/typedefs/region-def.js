@@ -1,0 +1,26 @@
+const { gql } = require('apollo-server');
+
+const typeDefs = gql `
+	type Regions {
+		_id: String!
+		id: Int!
+		owner: String!
+		name: String!
+		capital: String
+		leader: String
+		landmarks:  [String]
+        subregions: [String]
+	}
+	extend type Query {
+		getAllRegions: [Regions]
+		getRegionById(_id: String!): Regions 
+	}
+	extend type Mutation {
+		addSubregion(region: RegionsInput!, _id: String!, index: Int!): String
+		deleteSubregion(regionId: String!, _id: String!): [String]		
+		updateSubregionField(regionId: String!, _id: String!, field: String!, value: String!, flag: Int!): [String]
+		sortSubregions(_id: String!, filter: String!, direction: Int!): Boolean
+	}
+`;
+
+module.exports = { typeDefs: typeDefs }

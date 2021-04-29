@@ -17,14 +17,23 @@ export const GET_DB_MAPS = gql`
 			id
 			name
 			owner
-			regions {
+			regions
+		}
+	}
+`;
+
+export const GET_DB_REGIONS = gql`
+	query GetDBRegions {
+		getAllRegions{
 				_id
 				id
+				owner
 				name
 				capital
 				leader
                 landmarks
-			}
+				subregions
 		}
 	}
 `;
+
