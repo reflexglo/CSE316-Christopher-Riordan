@@ -5,11 +5,22 @@ import WRow from 'wt-frontend/build/components/wgrid/WRow';
 
 const RegionEntry = (props) => {
     const activeStyle = props.isActive ? "active-region" : "item-region";
+
+    const handleViewing = () => {
+        props.setViewing(true);
+        props.setActiveRegion(props.region);
+    }
+
+    const handleSelecting = () => {
+        props.setSelectedRegion(props.region);
+        props.enterRegion(props.region);
+    }
+
     return(
-        <WNavItem className={activeStyle} onClick={() => props.setActiveRegion(props.region)}>
+        <WNavItem className={activeStyle}>
             <WRow>
                     <WCol size="2">
-                        <div className="region-entry">
+                        <div className="region-entry" onClick={handleSelecting}>
                         {props.region.name}&nbsp;
                         </div>     
                     </WCol>
@@ -26,7 +37,7 @@ const RegionEntry = (props) => {
                     <WCol size="1">
                     </WCol>
                     <WCol size="4">
-                    <div className="region-entry">
+                    <div className="region-entry" onClick={handleViewing}>
                         {props.region.landmarks}&nbsp;
                         </div>     
                     </WCol>

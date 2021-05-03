@@ -13,6 +13,10 @@ import WInput from 'wt-frontend/build/components/winput/WInput';
 const RegionViewer = (props) => {
     const pathNameArr = props.pathname.split(" > ");
     const parentName = pathNameArr[pathNameArr.length-1];
+    const handleReturn = () => {
+        props.setViewing(false);
+        props.setActiveRegion(undefined);
+    }
     return(
     <WLayout>
         <WRow>
@@ -35,7 +39,16 @@ const RegionViewer = (props) => {
                     Region Name: {props.activeRegion.name}
                 </div>
                 <div className="region-viewer-main">
-                    Parent Region: {parentName}
+                    <WRow>
+                        <WCol size="2">
+                        Parent Region: 
+                        </WCol>
+                        <WCol size="6">
+                            <div className="parent-name" onClick={handleReturn}>
+                            {parentName}
+                            </div>
+                        </WCol>
+                    </WRow>
                 </div>
                 <div className="region-viewer-main">
                     Region Capital: {props.activeRegion.capital}
@@ -46,11 +59,6 @@ const RegionViewer = (props) => {
                 <div className="region-viewer-main">
                     # of Sub Regions: {props.activeRegion.subregions.length}
                 </div>
-                <WButton className="return-spreadsheet" onClick={() => props.setViewing(false)}>
-                    <div className="return-text">
-                        Return To Spreadsheet
-                    </div>
-                </WButton>
             </WCol>
             <WCol size="4">
                 <div className="landmarks-header">

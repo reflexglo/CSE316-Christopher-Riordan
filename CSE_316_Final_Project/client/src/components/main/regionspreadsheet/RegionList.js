@@ -26,54 +26,6 @@ const RegionList = (props) => {
         }
     }
     if(props.selectedRegion){
-        if(props.activeRegion){
-            return(
-                <>
-                <WLayout>
-                    <WMHeader className="region-list-header">
-                        <WRow>
-                            <WCol size="2">
-                                Name:
-                            </WCol>
-                            <WCol size="2">
-                                Capital:
-                            </WCol>
-                            <WCol size="3">
-                                Leader:
-                            </WCol>
-                            <WCol size="1">
-                                Flag:
-                            </WCol>
-                            <WCol size="4">
-                                Landmarks:
-                            </WCol>
-                        </WRow>
-                    </WMHeader>
-                    <WMMain className="region-list-main">
-                        {
-                            subRegions.length > 0 && subRegions.map(thisRegion => (
-                                <>
-                                {
-                                    props.activeRegion._id == thisRegion._id ?
-                                    <RegionEntry
-                                        region={thisRegion} setActiveRegion={props.setActiveRegion}
-                                        isActive={true} region={thisRegion}
-                                    />
-                                    :
-                                    <RegionEntry
-                                        region={thisRegion} setActiveRegion={props.setActiveRegion}
-                                        isActive={false} region={thisRegion}
-                                    />
-                                }
-                                </>
-                            ))
-                        }
-                    </WMMain>
-                </WLayout>
-                </>
-            );
-        }
-        else{
             return(
                 <>
                 <WLayout>
@@ -100,8 +52,9 @@ const RegionList = (props) => {
                         {
                             subRegions.length > 0 && subRegions.map(thisRegion => (
                                 <RegionEntry
-                                    region={thisRegion} setActiveRegion={props.setActiveRegion}
-                                    isActive={false} region={thisRegion}
+                                    region={thisRegion} setViewing={props.setViewing}
+                                    enterRegion={props.enterRegion} setSelectedRegion={props.setSelectedRegion}
+                                    setActiveRegion={props.setActiveRegion}
                                 />
                             ))
                         }
@@ -109,57 +62,8 @@ const RegionList = (props) => {
                 </WLayout>
                 </>
             );
-        }
     }
     else{
-        if(props.activeRegion){
-            return(
-                <>
-                <WLayout>
-                    <WMHeader className="region-list-header">
-                        <WRow>
-                            <WCol size="2">
-                                Name:
-                            </WCol>
-                            <WCol size="2">
-                                Capital:
-                            </WCol>
-                            <WCol size="3">
-                                Leader:
-                            </WCol>
-                            <WCol size="1">
-                                Flag:
-                            </WCol>
-                            <WCol size="4">
-                                Landmarks:
-                            </WCol>
-                        </WRow>
-                    </WMHeader>
-                    <WMMain className="region-list-main">
-                        {
-                            mapRegions.length > 0 && mapRegions.map(thisRegion => (
-                                <>
-                                {
-                                    props.activeRegion._id == thisRegion._id ?
-                                    <RegionEntry
-                                        region={thisRegion} setActiveRegion={props.setActiveRegion}
-                                        isActive={true} region={thisRegion}
-                                    />
-                                    :
-                                    <RegionEntry
-                                        region={thisRegion} setActiveRegion={props.setActiveRegion}
-                                        isActive={false} region={thisRegion}
-                                    />
-                                }
-                                </>
-                            ))
-                        }
-                    </WMMain>
-                </WLayout>
-                </>
-            );
-        }
-        else{
             return(
                 <>
                 <WLayout>
@@ -186,8 +90,9 @@ const RegionList = (props) => {
                         {
                             mapRegions.length > 0 && mapRegions.map(thisRegion => (
                                 <RegionEntry
-                                    region={thisRegion} setActiveRegion={props.setActiveRegion}
-                                    isActive={false} region={thisRegion}
+                                    region={thisRegion} setViewing={props.setViewing}
+                                    enterRegion={props.enterRegion} setSelectedRegion={props.setSelectedRegion}
+                                    setActiveRegion={props.setActiveRegion}
                                 />
                             ))
                         }
@@ -195,7 +100,6 @@ const RegionList = (props) => {
                 </WLayout>
                 </>
             );
-        }
     }
 }
 

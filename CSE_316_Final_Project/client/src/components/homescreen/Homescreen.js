@@ -19,10 +19,10 @@ const Homescreen = (props) => {
 	let maps 								= [];
 	let regions								= [];
 	const [viewing, setViewing]				= useState(false);
+	const [activeRegion, setActiveRegion]	= useState(undefined);
 	const [paths, setPaths]					= useState("");
 	const [pathname, setPathname]			= useState("");
 	const [activeMap, setActiveMap] 		= useState(undefined);
-	const [activeRegion, setActiveRegion]	= useState(undefined);
 	const [selectedMap, setSelectedMap]		= useState(undefined);
 	const [selectedRegion, setSelectedRegion]	= useState(undefined);
 	const [deletedMap, setDeletedMap]			= useState("");
@@ -63,13 +63,13 @@ const Homescreen = (props) => {
 
     const auth = props.user === null ? false : true;
 
-	const createNewMap = async () => {
+	const createNewMap = async (mapName) => {
 		const length = maps.length
 		const id = length >= 1 ? maps[length - 1].id + Math.floor((Math.random() * 100) + 1) : 1;
 		let thisMap = {
 			_id: '',
 			id: id,
-			name: 'Untitled',
+			name: mapName,
 			owner: props.user._id,
 			regions: [],
 		}
@@ -154,16 +154,16 @@ const Homescreen = (props) => {
 		setPathname(activeMap.name);
 		setPaths(activeMap._id);
 	}
-	const enterRegion = () => {
-		setSelectedRegion(activeRegion);
-		setActiveRegion(undefined);
-		setPathname(pathname+" > "+activeRegion.name);
-		setPaths(paths+" "+activeRegion._id);
+	const enterRegion = (curRegion) => {
+		setSelectedRegion(curRegion);
+		setPathname(pathname+" > "+curRegion.name);
+		setPaths(paths+" "+curRegion._id);
 	}
 
 	const goHome = () => {
 		setSelectedMap(undefined);
 		setSelectedRegion(undefined);
+		setActiveRegion(undefined);
 		setPaths("");
 		setPathname("");
 	}
@@ -203,12 +203,12 @@ const Homescreen = (props) => {
 					setShowDelete={setShowDelete} updateMapField={updateMapField}
 					setActiveMap={setActiveMap} activeMap={activeMap} enterMap={enterMap}
 					selectedMap={selectedMap} selectedRegion={selectedRegion}
-					activeRegion={activeRegion} setActiveRegion={setActiveRegion}
 					addRegion={addRegion} regions={regions} refetch={refetch}
 					refetchRegions={refetchRegions} resetActiveMap={resetActiveMap}
 					enterRegion={enterRegion} addSubregion={addSubregion}
 					resetSelectedRegion={resetSelectedRegion} viewing={viewing}
-					setViewing={setViewing} pathname={pathname}
+					setViewing={setViewing} pathname={pathname} setSelectedRegion={setSelectedRegion}
+					activeRegion={activeRegion} setActiveRegion={setActiveRegion}
 				/>
 			</WLMain>
             {

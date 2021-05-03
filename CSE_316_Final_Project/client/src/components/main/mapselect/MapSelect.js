@@ -9,9 +9,11 @@ import WMHeader from 'wt-frontend/build/components/wmodal/WMHeader';
 import WModal from 'wt-frontend/build/components/wmodal/WModal';
 import WLayout from 'wt-frontend/build/components/wlayout/WLayout';
 import WButton from 'wt-frontend/build/components/wbutton/WButton';
+import { WNavItem, WInput } from 'wt-frontend';
 
 
 const MapSelect = (props) => {
+    let mapName = "";
     const [mapLength, setMapLength] = useState(0);
     const [addedMap, setAddedMap] = useState(false);
     if(addedMap){
@@ -28,9 +30,14 @@ const MapSelect = (props) => {
         }
     }
     const handleAdding = () => {
-        props.addNewMap();
+        props.addNewMap(mapName);
         setMapLength(props.maps.length+1);
         setAddedMap(true);
+        mapName = "";
+    }
+    const handleNaming = (e) => {
+        const { name, value } = e.target;
+        mapName = value;
     }
     return(
         <>
@@ -47,25 +54,32 @@ const MapSelect = (props) => {
                         setActiveMap={props.setActiveMap} 
                         addNewMap={props.addNewMap}
                     />
-                {
+                </WCol>
+                <WCol size="6">
+                    <img className="map-logo" src={logo}></img>
+                    <WRow>
+                        <WCol size="4">
+                        <WButton className="add-map" onClick={handleAdding}>
+                        <div className="addmap-text">
+                            Create New Map
+                        </div>
+                        </WButton>
+                        </WCol>
+                        <WCol size="8">
+                        <WInput className="list-item-edit" inputClass="list-item-edit-input" wType="lined" name='name' onBlur={handleNaming} autoFocus={true} defaultValue={mapName} color="black"/>
+                        </WCol>
+                    </WRow>
+                </WCol>
+            </WRow>
+        </WMMain>
+        {
                     props.activeMap && 
-                    <WButton className="add-map" onClick={props.enterMap}>
+                    <WButton className="select-map" onClick={props.enterMap}>
                         <div className="addmap-text">
                             Select Map
                         </div>
                     </WButton>
                 }
-                </WCol>
-                <WCol size="6">
-                    <img className="map-logo" src={logo}></img>
-                    <WButton className="add-map" onClick={handleAdding}>
-                        <div className="addmap-text">
-                            Create New Map
-                        </div>
-                    </WButton>
-                </WCol>
-            </WRow>
-        </WMMain>
         </WLayout>
         </>
     );

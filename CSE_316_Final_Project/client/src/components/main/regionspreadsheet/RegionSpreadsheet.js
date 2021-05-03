@@ -9,6 +9,7 @@ import RegionList                       from '../regionspreadsheet/RegionList'
 import plus from './plus.jpg'
 import undo from './undo.jpg'
 import redo from './redo.jpg'
+import WLayout from 'wt-frontend/build/components/wlayout/WLayout';
 
 const RegionSpreadsheet = (props) => {
     const regionName = props.selectedRegion ? "Region Name: " + props.selectedRegion.name : "Region Name: " + props.selectedMap.name;
@@ -76,6 +77,7 @@ const RegionSpreadsheet = (props) => {
 
     return(
         <>
+        <WLayout>
                 <WRow>
                     <WCol size="1">
                         <WButton className="region-spreadsheet-header" onClick={handleAdding}>
@@ -104,31 +106,12 @@ const RegionSpreadsheet = (props) => {
             <WMMain className="region-spreadsheet-main">
                 <RegionList
                     activeMap={props.activeMap} regions={props.regions}
-                    activeRegion={props.activeRegion} setActiveRegion={props.setActiveRegion}
-                    selectedRegion={props.selectedRegion}
+                    setSelectedRegion={props.setSelectedRegion}
+                    selectedRegion={props.selectedRegion} setViewing={props.setViewing}
+                    enterRegion={props.enterRegion} setActiveRegion={props.setActiveRegion}
                 />
-                {
-                    props.activeRegion &&
-                    <>
-                    <WRow>
-                        <WCol size="6">
-                        <WButton className="region-select" onClick={props.enterRegion}>
-                        <div className="select-region-text">
-                            Select Region
-                        </div>
-                        </WButton>
-                        </WCol>
-                        <WCol size="6">
-                        <WButton className="region-select" onClick={() => props.setViewing(true)}>
-                        <div className="select-region-text">
-                            View Region
-                        </div>
-                        </WButton>
-                        </WCol>
-                    </WRow>
-                    </>
-                }
             </WMMain>
+        </WLayout>
         </>
     );
 }

@@ -26,15 +26,16 @@ const MainContents = (props) => {
                                     selectedMap={props.selectedMap} selectedRegion={props.selectedRegion}
                                     addRegion={props.addRegion} regions={props.regions} activeMap={props.activeMap}
                                     refetchRegions={props.refetchRegions} refetch={props.refetch} resetActiveMap={props.resetActiveMap}
-                                    activeRegion={props.activeRegion} setActiveRegion={props.setActiveRegion}
                                     enterRegion={props.enterRegion} addSubregion={props.addSubregion}
                                     resetSelectedRegion={props.resetSelectedRegion} setViewing={props.setViewing}
+                                    setSelectedRegion={props.setSelectedRegion} setActiveRegion={props.setActiveRegion}
                                 />)
         }
         {
             regionViewer && (<RegionViewer
-                                activeRegion={props.activeRegion} pathname={props.pathname}
-                                setViewing={props.setViewing}
+                                pathname={props.pathname}
+                                setViewing={props.setViewing} refetchRegions={props.refetchRegions}
+                                activeRegion={props.activeRegion} setActiveRegion={props.setActiveRegion}
                             />)
         }
         </>

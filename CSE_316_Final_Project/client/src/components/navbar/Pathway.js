@@ -40,7 +40,7 @@ const Pathway = (props) => {
                 (pathNameArr.length > 0) && pathNameArr.map((path,index) =>(
                     <>
                         {
-                            index < pathNameArr.length-1 &&
+                            index < pathNameArr.length-2 &&
                             <>
                                 <WButton className={"path-name"} onClick={() => selectDirectory(index)}>
                                     {path}
@@ -51,7 +51,7 @@ const Pathway = (props) => {
                                 </>
                         }
                         {
-                            index == pathNameArr.length-1 &&
+                            index == pathNameArr.length-2 &&
                                 <WButton className={"path-name"} onClick={() => selectDirectory(index)}>
                                     {path}
                                 </WButton>
