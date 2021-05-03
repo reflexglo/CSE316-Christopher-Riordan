@@ -54,7 +54,7 @@ const RegionList = (props) => {
                                 <RegionEntry
                                     region={thisRegion} setViewing={props.setViewing}
                                     enterRegion={props.enterRegion} setSelectedRegion={props.setSelectedRegion}
-                                    setActiveRegion={props.setActiveRegion}
+                                    setActiveRegion={props.setActiveRegion} deleteRegion={props.deleteSubregion}
                                 />
                             ))
                         }
@@ -92,7 +92,7 @@ const RegionList = (props) => {
                                 <RegionEntry
                                     region={thisRegion} setViewing={props.setViewing}
                                     enterRegion={props.enterRegion} setSelectedRegion={props.setSelectedRegion}
-                                    setActiveRegion={props.setActiveRegion}
+                                    setActiveRegion={props.setActiveRegion} deleteRegion={props.deleteRegion}
                                 />
                             ))
                         }

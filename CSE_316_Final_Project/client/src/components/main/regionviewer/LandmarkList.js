@@ -6,9 +6,10 @@ const LandmarkList = (props) => {
     return(
         <>
             {
-                landmarkList && landmarkList.map(landmark => (
+                landmarkList && landmarkList.map((landmark,index) => (
                     <LandmarkEntry
-                        landmark={landmark}
+                        landmark={landmark} updateRegionField={props.updateRegionField}
+                        index={index} activeRegion={props.activeRegion}
                     />
                 ))
             }

@@ -3,6 +3,8 @@ import NavbarOptions 					from '../navbar/Navbar';
 import Pathway							from '../navbar/Pathway'
 import Login 							from '../modals/Login';
 import Delete 							from '../modals/Delete';
+import DeleteRegionModal						from '../modals/DeleteRegionModal';
+import DeleteSubregionModal				from '../modals/DeleteSubregionModal'
 import CreateAccount 					from '../modals/CreateAccount';
 import UpdateAccount 					from '../modals/UpdateAccount';
 import MainContents						from '../main/MainContents';
@@ -26,20 +28,27 @@ const Homescreen = (props) => {
 	const [selectedMap, setSelectedMap]		= useState(undefined);
 	const [selectedRegion, setSelectedRegion]	= useState(undefined);
 	const [deletedMap, setDeletedMap]			= useState("");
+	const [deletedRegion, setDeletedRegion]			= useState("");
+	const [deletedSubregion, setDeletedSubregion]			= useState("");
     const [showDelete, toggleShowDelete] 	= useState(false);
 	const [showLogin, toggleShowLogin] 		= useState(false);
 	const [showCreate, toggleShowCreate] 	= useState(false);
 	const [showUpdate, toggleShowUpdate] 	= useState(false);
+	const [showDeleteRegion, toggleShowDeleteRegion] = useState(false);
+	const [showDeleteSubregion, toggleShowDeleteSubregion] = useState(false);
 
 	const [AddMap] 			= useMutation(mutations.ADD_MAP);
 	const [DeleteMap]		= useMutation(mutations.DELETE_MAP);
 	const [UpdateMapField] 	= useMutation(mutations.UPDATE_MAP_FIELD);
 	const [AddRegion]		= useMutation(mutations.ADD_REGION);
 	const [AddSubregion]	= useMutation(mutations.ADD_SUBREGION);
+	const [DeleteRegion]	= useMutation(mutations.DELETE_REGION);
+	const [DeleteSubregion]	= useMutation(mutations.DELETE_SUBREGION);
+	const [UpdateRegionField] = useMutation(mutations.UPDATE_REGION_FIELD);
 
 	const { loading, error, data, refetch } = useQuery(GET_DB_MAPS);
 	if(loading) { console.log(loading, 'loading'); }
-	if(error) { console.log(error, 'error'); }
+	if(error) { console.log(JSON.stringify(error,null,2)); }
 	if(data) { 
 		maps = data.getAllMaps; 
 	}
@@ -121,11 +130,29 @@ const Homescreen = (props) => {
 		const { data } = await AddSubregion({ variables: { _id: selectedRegion._id, region: thisSubregion, index: -1 }, refetchQueries: [{ query: GET_DB_REGIONS }] });
 	}
 
+	const deleteRegion = async (region) => {
+		let mapID = activeMap._id;
+		let regionID = region._id;
+		const { data } = await DeleteRegion({ variables: { _id: mapID, regionId: regionID }, refetchQueries: [{ query: GET_DB_REGIONS }] });
+	}
+
+	const deleteSubregion = async (region) => {
+		let parentID = selectedRegion._id;
+		let regionID = region._id;
+		const { data } = await DeleteSubregion({ variables: { _id: parentID, regionId: regionID }, refetchQueries: [{ query: GET_DB_REGIONS }] });
+	}
+
+	const updateRegionField = async (regionID, field, value) => {
+		const { data } = await UpdateRegionField({ variables: { field: field, value: value, regionId: regionID }, refetchQueries: [{ query: GET_DB_REGIONS }] });
+	}
+
     const setShowLogin = () => {
 		toggleShowDelete(false);
 		toggleShowCreate(false);
 		toggleShowLogin(!showLogin);
 		toggleShowUpdate(false);
+		toggleShowDeleteRegion(false);
+		toggleShowDeleteSubregion(false);
 	};
 
 	const setShowCreate = () => {
@@ -133,6 +160,8 @@ const Homescreen = (props) => {
 		toggleShowLogin(false);
 		toggleShowCreate(!showCreate);
 		toggleShowUpdate(false);
+		toggleShowDeleteRegion(false);
+		toggleShowDeleteSubregion(false);
 	};
 
 	const setShowUpdate = () => {
@@ -140,6 +169,8 @@ const Homescreen = (props) => {
 		toggleShowLogin(false);
 		toggleShowCreate(false);
 		toggleShowUpdate(!showUpdate);
+		toggleShowDeleteRegion(false);
+		toggleShowDeleteSubregion(false);
 	};
 
     const setShowDelete = (isDelete,map_id) => {
@@ -147,7 +178,27 @@ const Homescreen = (props) => {
 		toggleShowLogin(false);
 		toggleShowDelete(isDelete);
 		toggleShowUpdate(false);
+		toggleShowDeleteRegion(false);
+		toggleShowDeleteSubregion(false);
 		setDeletedMap(map_id);
+	}
+	const setShowDeleteRegion = (isDelete,region_id) => {
+		toggleShowCreate(false);
+		toggleShowLogin(false);
+		toggleShowDelete(false);
+		toggleShowUpdate(false);
+		toggleShowDeleteRegion(isDelete);
+		toggleShowDeleteSubregion(false);
+		setDeletedRegion(region_id);
+	}
+	const setShowDeleteSubregion = (isDelete,region_id) => {
+		toggleShowCreate(false);
+		toggleShowLogin(false);
+		toggleShowDelete(false);
+		toggleShowUpdate(false);
+		toggleShowDeleteRegion(false);
+		toggleShowDeleteSubregion(isDelete);
+		setDeletedSubregion(region_id);
 	}
 	const enterMap = () => {
 		setSelectedMap(activeMap);
@@ -164,6 +215,7 @@ const Homescreen = (props) => {
 		setSelectedMap(undefined);
 		setSelectedRegion(undefined);
 		setActiveRegion(undefined);
+		setViewing(false);
 		setPaths("");
 		setPathname("");
 	}
@@ -209,10 +261,20 @@ const Homescreen = (props) => {
 					resetSelectedRegion={resetSelectedRegion} viewing={viewing}
 					setViewing={setViewing} pathname={pathname} setSelectedRegion={setSelectedRegion}
 					activeRegion={activeRegion} setActiveRegion={setActiveRegion}
+					deleteRegion={setShowDeleteRegion} deleteSubregion={setShowDeleteSubregion}
+					updateRegionField={updateRegionField}
 				/>
 			</WLMain>
             {
 				showDelete && (<Delete setShowDelete={setShowDelete} deleteMap={deleteMap} map_id={deletedMap} />)
+			}
+
+			{
+				showDeleteRegion && (<DeleteRegionModal setShowDeleteRegion={setShowDeleteRegion} deleteRegion={deleteRegion} region_id={deletedRegion} />)
+			}
+
+			{
+				showDeleteSubregion && (<DeleteSubregionModal setShowDeleteSubregion={setShowDeleteSubregion} deleteSubregion={deleteSubregion} region_id={deletedSubregion} />)
 			}
 
 			{

@@ -75,6 +75,18 @@ module.exports = {
 
 			if(updated) return (region._id);
 			else return ('Could not add region');
+		},
+		deleteRegion: async (_, args) => {
+			const  { _id, regionId } = args;
+			const mapId = new ObjectId(_id);
+			const deletedId = new ObjectId(regionId);
+			const found = await Map.findOne({_id: mapId});
+			let mapRegions = found.regions;
+			mapRegions = mapRegions.filter(region => region._id !== regionId);
+			const updated = await Map.updateOne({_id: mapId}, { regions: mapRegions });
+			const deleted = await Region.deleteOne({_id: deletedId});
+			if(updated) return ("deleted");
+			else return ("not deleted");
 		}
     }
 }

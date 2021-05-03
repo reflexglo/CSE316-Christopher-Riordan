@@ -20,9 +20,19 @@ const RegionEntry = (props) => {
         <WNavItem className={activeStyle}>
             <WRow>
                     <WCol size="2">
-                        <div className="region-entry" onClick={handleSelecting}>
-                        {props.region.name}&nbsp;
-                        </div>     
+                        <WRow>
+                            <WCol size="1">
+                                <div onClick={() => props.deleteRegion(true,props.region)}>
+                                    X
+                                </div>
+                            </WCol>
+                            <WCol size="11">
+                            <div className="region-entry" onClick={handleSelecting}>
+                            {props.region.name}&nbsp;
+                            </div> 
+                            </WCol>
+                        </WRow>
+                            
                     </WCol>
                     <WCol size="2">
                     <div className="region-entry">

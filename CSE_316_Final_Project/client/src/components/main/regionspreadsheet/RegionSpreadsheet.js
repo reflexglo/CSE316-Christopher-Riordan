@@ -109,6 +109,7 @@ const RegionSpreadsheet = (props) => {
                     setSelectedRegion={props.setSelectedRegion}
                     selectedRegion={props.selectedRegion} setViewing={props.setViewing}
                     enterRegion={props.enterRegion} setActiveRegion={props.setActiveRegion}
+                    deleteRegion={props.deleteRegion} deleteSubregion={props.deleteSubregion}
                 />
             </WMMain>
         </WLayout>

@@ -11,11 +11,18 @@ import WMFooter from 'wt-frontend/build/components/wmodal/WMFooter';
 import WInput from 'wt-frontend/build/components/winput/WInput';
 
 const RegionViewer = (props) => {
+    let landmarkName = "";
     const pathNameArr = props.pathname.split(" > ");
     const parentName = pathNameArr[pathNameArr.length-1];
+
     const handleReturn = () => {
         props.setViewing(false);
         props.setActiveRegion(undefined);
+    }
+
+    const handleNaming = (e) => {
+        const { name, value } = e.target;
+        landmarkName = value;
     }
     return(
     <WLayout>
@@ -66,19 +73,17 @@ const RegionViewer = (props) => {
                 </div>
                 <WMMain className="landmarks-list">
                     <LandmarkList
-                        activeRegion={props.activeRegion}
+                        activeRegion={props.activeRegion} updateRegionField={props.updateRegionField}
                     />
                 </WMMain>
                     <WRow>
                         <WCol size="1">
-                            <WButton className="add-landmark">
+                            <WButton className="add-landmark" onClick={() => props.updateRegionField(props.activeRegion._id,"add_landmark",landmarkName)}>
                                 +
                             </WButton>
                         </WCol>
                         <WCol size="7">
-                            <div className="landmarks-input">
-                                &nbsp;
-                            </div>
+                            <WInput className="landmarks-input" inputClass="landmarks-name" name='landmarkName' wType="filled" onBlur={handleNaming} autoFocus={true} defaultValue={landmarkName}/>
                         </WCol>
                         <WCol size="4">
                             <div className="landmarks-footer">

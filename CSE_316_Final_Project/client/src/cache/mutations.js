@@ -63,31 +63,13 @@ export const ADD_REGION = gql`
 
 export const DELETE_REGION = gql`
 	mutation DeleteRegion($regionId: String!, $_id: String!) {
-		deleteRegion(regionId: $regionId, _id: $_id) {
-			_id
-			id
-			owner
-			name
-			capital
-			leader
-			landmarks
-			subregions
-		}
+		deleteRegion(regionId: $regionId, _id: $_id)
 	}
 `;
 
 export const UPDATE_REGION_FIELD = gql`
-	mutation UpdateRegionField($_id: String!, $regionId: String!, $field: String!, $value: String!, $flag: Int!) {
-		updateRegionField(_id: $_id, regionId: $regionId, field: $field, value: $value, flag: $flag) {
-			_id
-			id
-			owner
-			name
-			capital
-			leader
-			landmarks
-			subregions
-		}
+	mutation UpdateRegionField($regionId: String!, $field: String!, $value: String!) {
+		updateRegionField(regionId: $regionId, field: $field, value: $value)
 	}
 `;
 
@@ -105,31 +87,7 @@ export const ADD_SUBREGION = gql`
 
 export const DELETE_SUBREGION = gql`
 	mutation DeleteSubregion($regionId: String!, $_id: String!) {
-		deleteSubregion(regionId: $regionId, _id: $_id) {
-			_id
-			id
-			owner
-			name
-			capital
-			leader
-			landmarks
-			subregions
-		}
-	}
-`;
-
-export const UPDATE_SUBREGION_FIELD = gql`
-	mutation UpdateSubregionField($_id: String!, $regionId: String!, $field: String!, $value: String!, $flag: Int!) {
-		updateSubregionField(_id: $_id, regionId: $regionId, field: $field, value: $value, flag: $flag) {
-			_id
-			id
-			owner
-			name
-			capital
-			leader
-			landmarks
-			subregions
-		}
+		deleteSubregion(regionId: $regionId, _id: $_id)
 	}
 `;
 

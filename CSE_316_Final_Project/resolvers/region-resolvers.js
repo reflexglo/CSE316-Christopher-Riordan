@@ -45,6 +45,44 @@ module.exports = {
 
 			if(updated) return (region._id);
 			else return ('Could not add subregion');
-		}
+		},
+		deleteSubregion: async (_, args) => {
+			const  { _id, regionId } = args;
+			const parentId = new ObjectId(_id);
+			const deletedId = new ObjectId(regionId);
+			const found = await Region.findOne({_id: parentId});
+			let subRegions = found.subregions;
+			subRegions = subRegions.filter(region => region._id !== regionId);
+			const updated = await Region.updateOne({_id: parentId}, { subregions: subRegions });
+			const deleted = await Region.deleteOne({_id: deletedId});
+			if(updated) return ("deleted");
+			else return ("not deleted");
+		},
+		updateRegionField: async (_, args) => {
+			const { regionId, field} = args;
+			let { value } = args;
+			const updatedId = new ObjectId(regionId);
+			const found = await Region.findOne({_id: updatedId});
+			if(field == "add_landmark"){
+				let landmarksList = found.landmarks;
+				landmarksList.push(value);
+				const updated = await Region.updateOne({_id: updatedId}, { landmarks: landmarksList });
+				if(updated) return ("updated");
+				else return ("not updated");
+			}
+			else if(field == "delete_landmark"){
+				let landmarksList = found.landmarks;
+				let index = parseInt(value);
+				landmarksList.splice(index,1);
+				const updated = await Region.updateOne({_id: updatedId}, { landmarks: landmarksList });
+				if(updated) return ("updated");
+				else return ("not updated");
+			}
+			else{
+				const updated = false;
+				if(updated) return ("updated");
+				else return ("not updated");
+			}
+		},
     }
 }

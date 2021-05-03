@@ -29,6 +29,7 @@ const MainContents = (props) => {
                                     enterRegion={props.enterRegion} addSubregion={props.addSubregion}
                                     resetSelectedRegion={props.resetSelectedRegion} setViewing={props.setViewing}
                                     setSelectedRegion={props.setSelectedRegion} setActiveRegion={props.setActiveRegion}
+                                    deleteRegion={props.deleteRegion} deleteSubregion={props.deleteSubregion}
                                 />)
         }
         {
@@ -36,6 +37,7 @@ const MainContents = (props) => {
                                 pathname={props.pathname}
                                 setViewing={props.setViewing} refetchRegions={props.refetchRegions}
                                 activeRegion={props.activeRegion} setActiveRegion={props.setActiveRegion}
+                                updateRegionField={props.updateRegionField}
                             />)
         }
         </>

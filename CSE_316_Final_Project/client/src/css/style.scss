@@ -423,9 +423,22 @@ html, body {
 }
 .landmarks-input{
     background-color: lightcyan;
-    color:black;
     height: 50%;
     width: 100%;
+}
+.landmarks-name{
+    color:black !important;
+    font-size: 20px;
+}
+.landmark-entry{
+    color:white;
+    font-size: 20px;
+}
+.remove-landmark{
+    color:red;
+}
+.remove-landmark:hover{
+    cursor: pointer;
 }
 .return-spreadsheet{
     width: 75%;
