@@ -14,6 +14,7 @@ import * as mutations 					from '../../cache/mutations';
 import { useMutation, useQuery } 		from '@apollo/client';
 import { WNavbar, WSidebar, WNavItem } 	from 'wt-frontend';
 import { WLayout, WLHeader, WLMain, WLSide } from 'wt-frontend';
+import { UpdateRegion_Transaction, SortRegions_Transaction, EditRegion_Transaction, SortSubregions_Transaction } from '../../utils/jsTPS'
 
 
 
@@ -36,6 +37,9 @@ const Homescreen = (props) => {
 	const [showUpdate, toggleShowUpdate] 	= useState(false);
 	const [showDeleteRegion, toggleShowDeleteRegion] = useState(false);
 	const [showDeleteSubregion, toggleShowDeleteSubregion] = useState(false);
+	const [nameSort, toggleNameSort]		= useState(false);
+	const [capitolSort, toggleCapitolSort]	= useState(false);
+	const [leaderSort, toggleLeaderSort]	= useState(false);
 
 	const [AddMap] 			= useMutation(mutations.ADD_MAP);
 	const [DeleteMap]		= useMutation(mutations.DELETE_MAP);
@@ -45,6 +49,8 @@ const Homescreen = (props) => {
 	const [DeleteRegion]	= useMutation(mutations.DELETE_REGION);
 	const [DeleteSubregion]	= useMutation(mutations.DELETE_SUBREGION);
 	const [UpdateRegionField] = useMutation(mutations.UPDATE_REGION_FIELD);
+	const [SortRegions]		= useMutation(mutations.SORT_REGIONS);
+	const [SortSubregions]	= useMutation(mutations.SORT_SUBREGIONS);
 
 	const { loading, error, data, refetch } = useQuery(GET_DB_MAPS);
 	if(loading) { console.log(loading, 'loading'); }
@@ -53,16 +59,50 @@ const Homescreen = (props) => {
 		maps = data.getAllMaps; 
 	}
 
+	const hasUndo =  () => {
+		return props.tps.hasTransactionToUndo();
+	}
+
+	const hasRedo =  () => {
+		return props.tps.hasTransactionToRedo();
+	}
+
+	const tpsUndo = async () => {
+		const retVal = await props.tps.undoTransaction();
+		refetchRegions();
+		refetch();
+		return retVal;
+	}
+
+	const tpsRedo = async () => {
+		const retVal = await props.tps.doTransaction();
+		refetchRegions();
+		refetch();
+		return retVal;
+	}
+
 	const resetActiveMap = () => {
+		if(activeMap){
 			let tempID = activeMap._id;
 			let thisMap = maps.find(thisMap => thisMap._id === tempID);
 			setActiveMap(thisMap);
+		}
 	}
 
 	const resetSelectedRegion = () => {
-		let tempID = selectedRegion._id;
-		let thisRegion = regions.find(thisRegion => thisRegion._id === tempID);
-		setSelectedRegion(thisRegion);
+		if(selectedRegion){
+			let tempID = selectedRegion._id;
+			let thisRegion = regions.find(thisRegion => thisRegion._id === tempID);
+			setSelectedRegion(thisRegion);
+		}
+	}
+
+	const resetActiveRegion = () => {
+		if(activeRegion){
+			let tempID = activeRegion._id;
+			let thisRegion = regions.find(thisRegion => thisRegion._id === tempID);
+			setActiveRegion(thisRegion);
+		}
 	}
 
 	const { loading: rloading, error: rerror, data: rdata, refetch: refetchRegions } = useQuery(GET_DB_REGIONS);
@@ -112,7 +152,9 @@ const Homescreen = (props) => {
 			landmarks: [],
 			subregions: [],
 		}
-		const { data } = await AddRegion({ variables: { _id: activeMap._id, region: thisRegion, index: -1 }, refetchQueries: [{ query: GET_DB_MAPS }] });
+		let transaction = new UpdateRegion_Transaction(activeMap._id,undefined,thisRegion,1,AddRegion,DeleteRegion);
+		props.tps.addTransaction(transaction);
+		tpsRedo();
 	}
 	const addSubregion = async () => {
 		const length = regions.length
@@ -127,23 +169,164 @@ const Homescreen = (props) => {
 			landmarks: [],
 			subregions: [],
 		}
-		const { data } = await AddSubregion({ variables: { _id: selectedRegion._id, region: thisSubregion, index: -1 }, refetchQueries: [{ query: GET_DB_REGIONS }] });
+		let transaction = new UpdateRegion_Transaction(undefined,selectedRegion._id,thisSubregion,3,AddSubregion,DeleteSubregion);
+		props.tps.addTransaction(transaction);
+		tpsRedo();
 	}
 
 	const deleteRegion = async (region) => {
-		let mapID = activeMap._id;
-		let regionID = region._id;
-		const { data } = await DeleteRegion({ variables: { _id: mapID, regionId: regionID }, refetchQueries: [{ query: GET_DB_REGIONS }] });
+		let transaction = new UpdateRegion_Transaction(activeMap._id,undefined,region,0,AddRegion,DeleteRegion);
+		props.tps.addTransaction(transaction);
+		tpsRedo();
 	}
 
 	const deleteSubregion = async (region) => {
-		let parentID = selectedRegion._id;
-		let regionID = region._id;
-		const { data } = await DeleteSubregion({ variables: { _id: parentID, regionId: regionID }, refetchQueries: [{ query: GET_DB_REGIONS }] });
+		let transaction = new UpdateRegion_Transaction(undefined,selectedRegion._id,region,2,AddSubregion,DeleteSubregion);
+		props.tps.addTransaction(transaction);
+		tpsRedo();
 	}
 
-	const updateRegionField = async (regionID, field, value) => {
-		const { data } = await UpdateRegionField({ variables: { field: field, value: value, regionId: regionID }, refetchQueries: [{ query: GET_DB_REGIONS }] });
+	const updateRegionField = async (regionID, field, value, prev) => {
+		let transaction = new EditRegion_Transaction(regionID, field, prev, value, UpdateRegionField);
+		props.tps.addTransaction(transaction);
+		tpsRedo();
+	}
+
+	const addLandmark = async (landmarkName) => {
+		let transaction = new UpdateRegion_Transaction(undefined,activeRegion._id,undefined,5,UpdateRegionField,UpdateRegionField,-1,landmarkName);
+		props.tps.addTransaction(transaction);
+		tpsRedo();
+	}
+
+	const removeLandmark = async (index) => {
+		let transaction = new UpdateRegion_Transaction(undefined,activeRegion._id,undefined,4,UpdateRegionField,UpdateRegionField,-1,index);
+		props.tps.addTransaction(transaction);
+		tpsRedo();
+	}
+
+	const viewNextRegion = () => {
+		if(selectedRegion){
+			let index = selectedRegion.subregions.indexOf(activeRegion._id);
+			if(index < selectedRegion.subregions.length-1){
+				index = index + 1;
+				for(let i = 0;i<regions.length;i++){
+					if(selectedRegion.subregions[index] == regions[i]._id){
+						setActiveRegion(regions[i]);
+					}
+				}
+			}
+		}
+		else{
+			let index = activeMap.regions.indexOf(activeRegion._id);
+			if(index < activeMap.regions.length-1){
+				index = index + 1;
+				for(let i = 0;i<regions.length;i++){
+					if(activeMap.regions[index] == regions[i]._id){
+						setActiveRegion(regions[i]);
+					}
+				}
+			}
+		}
+	}
+
+	const viewPreviousRegion = () => {
+		if(selectedRegion){
+			let index = selectedRegion.subregions.indexOf(activeRegion._id);
+			if(index > 0){
+				index = index - 1;
+				for(let i = 0;i<regions.length;i++){
+					if(selectedRegion.subregions[index] == regions[i]._id){
+						setActiveRegion(regions[i]);
+					}
+				}
+			}
+		}
+		else{
+			let index = activeMap.regions.indexOf(activeRegion._id);
+			if(index > 0){
+				index = index - 1;
+				for(let i = 0;i<regions.length;i++){
+					if(activeMap.regions[index] == regions[i]._id){
+						setActiveRegion(regions[i]);
+					}
+				}
+			}
+		}
+	}
+
+	const getCurrentRegions = () => {
+		let curRegions = [];
+			for(let i = 0;i<activeMap.regions.length;i++){
+				for(let k = 0;k<regions.length;k++){
+					if(activeMap.regions[i] == regions[k]._id){
+						curRegions.push(regions[k]);
+					}
+				}
+			}
+			return curRegions;
+	}
+
+	const getCurrentSubregions = () => {
+		let curRegions = [];
+			for(let i = 0;i<selectedRegion.subregions.length;i++){
+				for(let k = 0;k<regions.length;k++){
+					if(selectedRegion.subregions[i] == regions[k]._id){
+						curRegions.push(regions[k]);
+					}
+				}
+			}
+			return curRegions;
+	}
+
+	const sortRegions = (filter) => {
+		let dir;
+		if(filter == "name"){
+			toggleNameSort(!nameSort);
+			toggleCapitolSort(false);
+			toggleLeaderSort(false);
+			dir = nameSort ? 1 : -1;
+		}
+		if(filter == "capital"){
+			toggleNameSort(false);
+			toggleCapitolSort(!capitolSort);
+			toggleLeaderSort(false);
+			dir = capitolSort ? 1 : -1;
+		}
+		if(filter == "leader"){
+			toggleNameSort(false);
+			toggleCapitolSort(false);
+			toggleLeaderSort(!leaderSort);
+			dir = leaderSort ? 1 : -1;
+		}
+		let curRegions = getCurrentRegions();
+		let transaction = new SortRegions_Transaction(curRegions,dir,filter,activeMap._id,SortRegions);
+		props.tps.addTransaction(transaction);
+		tpsRedo();
+	}
+	const sortSubregions = (filter) => {
+		let dir;
+		if(filter == "name"){
+			toggleNameSort(!nameSort);
+			toggleCapitolSort(false);
+			toggleLeaderSort(false);
+			dir = nameSort ? 1 : -1;
+		}
+		if(filter == "capital"){
+			toggleNameSort(false);
+			toggleCapitolSort(!capitolSort);
+			toggleLeaderSort(false);
+			dir = capitolSort ? 1 : -1;
+		}
+		if(filter == "leader"){
+			toggleNameSort(false);
+			toggleCapitolSort(false);
+			toggleLeaderSort(!leaderSort);
+			dir = leaderSort ? 1 : -1;
+		}
+		let curRegions = getCurrentSubregions();
+		let transaction = new SortSubregions_Transaction(curRegions,dir,filter,selectedRegion._id,SortSubregions);
+		props.tps.addTransaction(transaction);
+		tpsRedo();
 	}
 
     const setShowLogin = () => {
@@ -204,11 +387,13 @@ const Homescreen = (props) => {
 		setSelectedMap(activeMap);
 		setPathname(activeMap.name);
 		setPaths(activeMap._id);
+		props.tps.clearAllTransactions();
 	}
 	const enterRegion = (curRegion) => {
 		setSelectedRegion(curRegion);
 		setPathname(pathname+" > "+curRegion.name);
 		setPaths(paths+" "+curRegion._id);
+		props.tps.clearAllTransactions();
 	}
 
 	const goHome = () => {
@@ -218,6 +403,7 @@ const Homescreen = (props) => {
 		setViewing(false);
 		setPaths("");
 		setPathname("");
+		props.tps.clearAllTransactions();
 	}
 	return (
 		<WLayout wLayout="header">
@@ -236,7 +422,8 @@ const Homescreen = (props) => {
 								maps={maps} regions={regions}
 								setSelectedRegion={setSelectedRegion}
 								setPaths={setPaths} setPathname={setPathname}
-								setViewing={setViewing}
+								setViewing={setViewing} viewing={viewing}
+								viewNextRegion={viewNextRegion} viewPreviousRegion={viewPreviousRegion}
 							/>
 					</ul>
 					}
@@ -262,7 +449,9 @@ const Homescreen = (props) => {
 					setViewing={setViewing} pathname={pathname} setSelectedRegion={setSelectedRegion}
 					activeRegion={activeRegion} setActiveRegion={setActiveRegion}
 					deleteRegion={setShowDeleteRegion} deleteSubregion={setShowDeleteSubregion}
-					updateRegionField={updateRegionField}
+					updateRegionField={updateRegionField} resetActiveRegion={resetActiveRegion}
+					tpsUndo={tpsUndo} tpsRedo={tpsRedo} addLandmark={addLandmark} removeLandmark={removeLandmark}
+					sortRegions={sortRegions} sortSubregions={sortSubregions}
 				/>
 			</WLMain>
             {

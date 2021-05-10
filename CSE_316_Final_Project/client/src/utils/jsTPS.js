@@ -1,8 +1,320 @@
+import {GET_DB_MAPS} from '../cache/queries';
+import {GET_DB_REGIONS} from '../cache/queries'
+
 export class jsTPS_Transaction {
     constructor() {};
     doTransaction() {};
     undoTransaction () {};
 }
+
+
+
+
+export class SortRegions_Transaction extends jsTPS_Transaction {
+    constructor(regionList,dir,filter,mapID,callback){
+        super();
+        this.mapID = mapID;
+        this.filter = filter;
+        this.dir = dir;
+        this.updateFunction = callback;
+        this.prevOrder = "";
+        this.regions = regionList;
+        for(let i = 0;i<this.regions.length;i++){
+            if(i<this.regions.length-1){
+                this.prevOrder += this.regions[i]._id + " ";
+            }
+            else{
+                this.prevOrder += this.regions[i]._id;
+            }
+            
+        }
+    }
+
+    async doTransaction() {
+        let newOrder = "";
+        if(this.filter == "name"){
+            for(let i = 0;i<this.regions.length;i++){
+                for(let k = 0;k<this.regions.length-1;k++){
+                    let thisFilter = this.regions[k].name;
+                    let nextFilter = this.regions[k+1].name;
+                    if(this.dir == 1){
+                        if(thisFilter.localeCompare(nextFilter)>=0){
+                            let temp = this.regions[k+1];
+                            this.regions[k+1] = this.regions[k];
+                            this.regions[k] = temp;
+                        }
+                    }
+                    else{
+                        if(thisFilter.localeCompare(nextFilter)<0){
+                            let temp = this.regions[k+1];
+                            this.regions[k+1] = this.regions[k];
+                            this.regions[k] = temp;
+                        }
+                    }
+                }
+            }
+        }
+        else if(this.filter == "capital"){
+            for(let i = 0;i<this.regions.length;i++){
+                for(let k = 0;k<this.regions.length-1;k++){
+                    let thisFilter = this.regions[k].capital;
+                    let nextFilter = this.regions[k+1].capital;
+                    if(this.dir == 1){
+                        if(thisFilter.localeCompare(nextFilter)>=0){
+                            let temp = this.regions[k+1];
+                            this.regions[k+1] = this.regions[k];
+                            this.regions[k] = temp;
+                        }
+                    }
+                    else{
+                        if(thisFilter.localeCompare(nextFilter)<0){
+                            let temp = this.regions[k+1];
+                            this.regions[k+1] = this.regions[k];
+                            this.regions[k] = temp;
+                        }
+                    }
+                }
+            }
+        }
+        else if(this.filter == "leader"){
+            for(let i = 0;i<this.regions.length;i++){
+                for(let k = 0;k<this.regions.length-1;k++){
+                    let thisFilter = this.regions[k].leader;
+                    let nextFilter = this.regions[k+1].leader;
+                    if(this.dir == 1){
+                        if(thisFilter.localeCompare(nextFilter)>=0){
+                            let temp = this.regions[k+1];
+                            this.regions[k+1] = this.regions[k];
+                            this.regions[k] = temp;
+                        }
+                    }
+                    else{
+                        if(thisFilter.localeCompare(nextFilter)<0){
+                            let temp = this.regions[k+1];
+                            this.regions[k+1] = this.regions[k];
+                            this.regions[k] = temp;
+                        }
+                    }
+                }
+            }
+        }
+        for(let i = 0;i<this.regions.length;i++){
+            if(i<this.regions.length-1){
+                newOrder += this.regions[i]._id + " ";
+            }
+            else{
+                newOrder += this.regions[i]._id;
+            }
+        }
+        const {data} = await this.updateFunction({variables:{_id: this.mapID, filter: newOrder, direction: this.dir}, refetchQueries: [{ query: GET_DB_MAPS }]})
+        return data;
+    }
+    async undoTransaction() {
+        const {data} = await this.updateFunction({variables:{_id: this.mapID, filter: this.prevOrder, direction: this.dir}, refetchQueries: [{ query: GET_DB_MAPS }]})
+        return data;
+    }
+}
+
+export class SortSubregions_Transaction extends jsTPS_Transaction {
+    constructor(regionList,dir,filter,regionID,callback){
+        super();
+        this.regionID = regionID;
+        this.filter = filter;
+        this.dir = dir;
+        this.updateFunction = callback;
+        this.prevOrder = "";
+        this.regions = regionList;
+        for(let i = 0;i<this.regions.length;i++){
+            if(i<this.regions.length-1){
+                this.prevOrder += this.regions[i]._id + " ";
+            }
+            else{
+                this.prevOrder += this.regions[i]._id;
+            }
+            
+        }
+    }
+
+    async doTransaction() {
+        let newOrder = "";
+        if(this.filter == "name"){
+            for(let i = 0;i<this.regions.length;i++){
+                for(let k = 0;k<this.regions.length-1;k++){
+                    let thisFilter = this.regions[k].name;
+                    let nextFilter = this.regions[k+1].name;
+                    if(this.dir == 1){
+                        if(thisFilter.localeCompare(nextFilter)>=0){
+                            let temp = this.regions[k+1];
+                            this.regions[k+1] = this.regions[k];
+                            this.regions[k] = temp;
+                        }
+                    }
+                    else{
+                        if(thisFilter.localeCompare(nextFilter)<0){
+                            let temp = this.regions[k+1];
+                            this.regions[k+1] = this.regions[k];
+                            this.regions[k] = temp;
+                        }
+                    }
+                }
+            }
+        }
+        else if(this.filter == "capital"){
+            for(let i = 0;i<this.regions.length;i++){
+                for(let k = 0;k<this.regions.length-1;k++){
+                    let thisFilter = this.regions[k].capital;
+                    let nextFilter = this.regions[k+1].capital;
+                    if(this.dir == 1){
+                        if(thisFilter.localeCompare(nextFilter)>=0){
+                            let temp = this.regions[k+1];
+                            this.regions[k+1] = this.regions[k];
+                            this.regions[k] = temp;
+                        }
+                    }
+                    else{
+                        if(thisFilter.localeCompare(nextFilter)<0){
+                            let temp = this.regions[k+1];
+                            this.regions[k+1] = this.regions[k];
+                            this.regions[k] = temp;
+                        }
+                    }
+                }
+            }
+        }
+        else if(this.filter == "leader"){
+            for(let i = 0;i<this.regions.length;i++){
+                for(let k = 0;k<this.regions.length-1;k++){
+                    let thisFilter = this.regions[k].leader;
+                    let nextFilter = this.regions[k+1].leader;
+                    if(this.dir == 1){
+                        if(thisFilter.localeCompare(nextFilter)>=0){
+                            let temp = this.regions[k+1];
+                            this.regions[k+1] = this.regions[k];
+                            this.regions[k] = temp;
+                        }
+                    }
+                    else{
+                        if(thisFilter.localeCompare(nextFilter)<0){
+                            let temp = this.regions[k+1];
+                            this.regions[k+1] = this.regions[k];
+                            this.regions[k] = temp;
+                        }
+                    }
+                }
+            }
+        }
+        for(let i = 0;i<this.regions.length;i++){
+            if(i<this.regions.length-1){
+                newOrder += this.regions[i]._id + " ";
+            }
+            else{
+                newOrder += this.regions[i]._id;
+            }
+        }
+        const {data} = await this.updateFunction({variables:{_id: this.regionID, filter: newOrder, direction: this.dir}, refetchQueries: [{ query: GET_DB_REGIONS }]})
+        return data;
+    }
+    async undoTransaction() {
+        const {data} = await this.updateFunction({variables:{_id: this.regionID, filter: this.prevOrder, direction: this.dir}, refetchQueries: [{ query: GET_DB_REGIONS }]})
+        return data;
+    }
+}
+
+
+export class EditRegion_Transaction extends jsTPS_Transaction {
+	constructor(regionID, field, prev, update, callback) {
+		super();
+		this.regionID = regionID;
+		this.field = field;
+		this.prev = prev;
+		this.update = update;
+		this.updateFunction = callback;
+	}	
+
+	async doTransaction() {
+        const data = await this.updateFunction({ variables: { field: this.field, value: this.update, regionId: this.regionID }, refetchQueries: [{ query: GET_DB_REGIONS }] });
+		return data;
+    }
+
+    async undoTransaction() {
+		const data = await this.updateFunction({ variables: { field: this.field, value: this.prev, regionId: this.regionID }, refetchQueries: [{ query: GET_DB_REGIONS }] });
+		return data;
+
+    }
+}
+
+
+
+/*  Handles create/delete of list items */
+export class UpdateRegion_Transaction extends jsTPS_Transaction {
+    // opcodes: 0 - delete, 1 - add 
+    constructor(mapID, regionID, subregion, opcode, addfunc, delfunc, index = -1, landmark = "") {
+        super();
+        this.mapID = mapID;
+		this.regionID = regionID;
+		this.subregion = subregion;
+        this.addFunction = addfunc;
+        this.deleteFunction = delfunc;
+        this.opcode = opcode;
+        this.index = index;
+        this.landmark = landmark;
+    }
+    async doTransaction() {
+		let data = undefined;
+        if(this.opcode == 0){
+             data  = await this.deleteFunction({variables: {regionId: this.subregion._id, _id: this.mapID}, refetchQueries: [{ query: GET_DB_REGIONS }]});
+        }
+        else if(this.opcode == 1){
+            data = await this.addFunction({variables: {region: this.subregion, _id: this.mapID, index: this.index}, refetchQueries: [{ query: GET_DB_MAPS }]}); 
+            this.subregion._id = data.data.addRegion;
+        } 
+        else if(this.opcode == 2){
+            data  = await this.deleteFunction({variables: {regionId: this.subregion._id, _id: this.regionID}, refetchQueries: [{ query: GET_DB_REGIONS }]});
+        }
+        else if(this.opcode == 3){
+            data = await this.addFunction({variables: {region: this.subregion, _id: this.regionID, index: this.index}, refetchQueries: [{ query: GET_DB_REGIONS }]}); 
+            this.subregion._id = data.data.addSubregion;
+        }
+        else if(this.opcode == 4){
+            data = await this.deleteFunction({variables: {regionId: this.regionID, field: "delete_landmark", value: this.landmark}, refetchQueries: [{ query: GET_DB_REGIONS}]});
+            this.landmark = data.data.updateRegionField;
+        }
+        else if(this.opcode == 5){
+            data = await this.addFunction({variables: {regionId: this.regionID, field: "add_landmark", value: this.landmark}, refetchQueries: [{ query: GET_DB_REGIONS}]});
+            console.log(data);
+            this.landmark = data.data.updateRegionField;
+        }
+		return data;
+    }
+    // Since delete/add are opposites, flip matching opcode
+    async undoTransaction() {
+		let data = undefined;
+        if(this.opcode == 1){
+            data  = await this.deleteFunction({variables: {regionId: this.subregion._id, _id: this.mapID}, refetchQueries: [{ query: GET_DB_REGIONS }]});
+       }
+       else if(this.opcode == 0){
+            data = await this.addFunction({variables: {region: this.subregion, _id: this.mapID, index: this.index}, refetchQueries: [{ query: GET_DB_MAPS }]});
+           this.subregion._id = data.data.addRegion; 
+       }
+       else if(this.opcode == 3){
+            data  = await this.deleteFunction({variables: {regionId: this.subregion._id, _id: this.regionID}, refetchQueries: [{ query: GET_DB_REGIONS }]});
+        }
+        else if(this.opcode == 2){
+            data = await this.addFunction({variables: {region: this.subregion, _id: this.regionID, index: this.index}, refetchQueries: [{ query: GET_DB_REGIONS }]}); 
+            this.subregion._id = data.data.addSubregion;
+        }
+        else if(this.opcode == 5){
+            data = await this.deleteFunction({variables: {regionId: this.regionID, field: "delete_landmark", value: this.landmark}, refetchQueries: [{ query: GET_DB_REGIONS}]});
+            this.landmark = data.data.updateRegionField;
+        }
+        else if(this.opcode == 4){
+            data = await this.addFunction({variables: {regionId: this.regionID, field: "add_landmark", value: this.landmark}, refetchQueries: [{ query: GET_DB_REGIONS}]});
+            this.landmark = data.data.updateRegionField;
+        }
+       return data;
+    }
+}
+
 export class jsTPS {
     constructor() {
         // THE TRANSACTION STACK

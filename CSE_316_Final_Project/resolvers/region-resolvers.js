@@ -65,16 +65,43 @@ module.exports = {
 			const found = await Region.findOne({_id: updatedId});
 			if(field == "add_landmark"){
 				let landmarksList = found.landmarks;
+				let index = landmarksList.length;
 				landmarksList.push(value);
 				const updated = await Region.updateOne({_id: updatedId}, { landmarks: landmarksList });
-				if(updated) return ("updated");
+				if(updated) return (index.toString());
 				else return ("not updated");
 			}
 			else if(field == "delete_landmark"){
 				let landmarksList = found.landmarks;
 				let index = parseInt(value);
+				let deleted = landmarksList[index];
 				landmarksList.splice(index,1);
 				const updated = await Region.updateOne({_id: updatedId}, { landmarks: landmarksList });
+				if(updated) return (deleted);
+				else return ("not updated");
+			}
+			else if(field == "update_landmark"){
+				let landmarksList = found.landmarks;
+				let params = value.split("#");
+				let newValue = params[0];
+				let index = params[1];
+				landmarksList[index] = newValue;
+				const updated = await Region.updateOne({_id: updatedId}, { landmarks: landmarksList });
+				if(updated) return ("updated");
+				else return ("not updated");
+			}
+			else if(field == "edit_name"){
+				const updated = await Region.updateOne({_id: updatedId}, { name: value });
+				if(updated) return ("updated");
+				else return ("not updated");
+			}
+			else if(field == "edit_capital"){
+				const updated = await Region.updateOne({_id: updatedId}, { capital: value });
+				if(updated) return ("updated");
+				else return ("not updated");
+			}
+			else if(field == "edit_leader"){
+				const updated = await Region.updateOne({_id: updatedId}, { leader: value });
 				if(updated) return ("updated");
 				else return ("not updated");
 			}
@@ -84,5 +111,14 @@ module.exports = {
 				else return ("not updated");
 			}
 		},
+		sortSubregions: async (_,args) => {
+			const {_id, filter, direction} = args;
+			const regionId = new ObjectId(_id);
+			let newOrder = filter.split(" ");
+			const updated = await Region.updateOne({_id: regionId}, {subregions: newOrder});
+			const found = await Region.findOne({_id: regionId});
+			if(updated) return true;
+			else return false;
+		}
     }
 }

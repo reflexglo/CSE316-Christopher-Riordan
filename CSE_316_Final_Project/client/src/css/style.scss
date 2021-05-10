@@ -434,6 +434,10 @@ html, body {
     color:white;
     font-size: 20px;
 }
+.landmark-subentry{
+    color:lightgrey;
+    font-size: 20px;
+}
 .remove-landmark{
     color:red;
 }
@@ -462,4 +466,12 @@ html, body {
 }
 .region-spreadsheet-main{
     height:100%;
+}
+.nav-arrow{
+    color:white;
+    font-size: 35px;
+}
+.nav-arrow:hover{
+    color:darkcyan;
+    cursor: pointer;
 }

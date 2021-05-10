@@ -1,4 +1,4 @@
-import React                            from 'react';
+import React, {useState}                            from 'react';
 import WelcomeScreen					from '../main/WelcomeScreen';
 import MapSelect                        from '../main/mapselect/MapSelect'
 import RegionSpreadsheet                from '../main/regionspreadsheet/RegionSpreadsheet'
@@ -8,6 +8,9 @@ const MainContents = (props) => {
     const mapSelect = props.auth && props.selectedMap == undefined;
     const regionSpreadsheet = props.auth && props.selectedMap != undefined && props.viewing == false;
     const regionViewer = props.auth && props.activeRegion != undefined && props.viewing == true;
+
+    const [subLandmarkList, setSubLandmarkList] = useState([]);
+
     return(
         <>
         {
@@ -30,6 +33,9 @@ const MainContents = (props) => {
                                     resetSelectedRegion={props.resetSelectedRegion} setViewing={props.setViewing}
                                     setSelectedRegion={props.setSelectedRegion} setActiveRegion={props.setActiveRegion}
                                     deleteRegion={props.deleteRegion} deleteSubregion={props.deleteSubregion}
+                                    updateRegionField={props.updateRegionField} tpsUndo={props.tpsUndo} tpsRedo={props.tpsRedo}
+                                    sortRegions={props.sortRegions} sortSubregions={props.sortSubregions}
+                                    setSubLandmarkList={setSubLandmarkList}
                                 />)
         }
         {
@@ -37,7 +43,9 @@ const MainContents = (props) => {
                                 pathname={props.pathname}
                                 setViewing={props.setViewing} refetchRegions={props.refetchRegions}
                                 activeRegion={props.activeRegion} setActiveRegion={props.setActiveRegion}
-                                updateRegionField={props.updateRegionField}
+                                updateRegionField={props.updateRegionField} resetActiveRegion={props.resetActiveRegion}
+                                tpsUndo={props.tpsUndo} tpsRedo={props.tpsRedo} addLandmark={props.addLandmark} removeLandmark={props.removeLandmark}
+                                regions={props.regions} subLandmarkList={subLandmarkList}
                             />)
         }
         </>

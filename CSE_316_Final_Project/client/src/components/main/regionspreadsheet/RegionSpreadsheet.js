@@ -19,6 +19,8 @@ const RegionSpreadsheet = (props) => {
     const [subregionLength, setSubregionLength] = useState(0);
     const [activeRegionLength, setActiveRegionLength] = useState(0);
     const [addedSubregion, setAddedSubregion] = useState(false);
+    const [sortTime, setSortTime] = useState(false);
+    const [subSortTime, setSubSortTime] = useState(false);
     if(props.selectedRegion){
         if(addedSubregion){
             if(subregionLength>props.regions.length || activeRegionLength>props.selectedRegion.subregions.length){
@@ -58,7 +60,18 @@ const RegionSpreadsheet = (props) => {
         }
     }
 
+    if(sortTime){
+        props.refetchRegions();
+        props.refetch();
+        props.resetActiveMap();
+        props.resetSelectedRegion();
+    }
 
+    if(subSortTime){
+        props.refetchRegions();
+        props.refetch();
+        props.resetSelectedRegion();
+    }
 
     const handleAdding = () => {
         if(props.selectedRegion){
@@ -75,6 +88,36 @@ const RegionSpreadsheet = (props) => {
         }
     }
 
+    const sortingTime = () => {
+        setSortTime(true);
+        setTimeout(() => {  
+             setSortTime(false);
+        },100);
+    }
+
+    const subSortingTime = () => {
+        setSubSortTime(true);
+        setTimeout(() => {  
+             setSubSortTime(false);
+        },100);
+    }
+
+    const undoTime = () => {
+        props.tpsUndo();
+        setSortTime(true);
+        setTimeout(() => {  
+             setSortTime(false);
+        },100);
+    }
+
+    const redoTime = () => {
+        props.tpsRedo();
+        setSortTime(true);
+        setTimeout(() => {  
+             setSortTime(false);
+        },100);
+    }
+
     return(
         <>
         <WLayout>
@@ -85,12 +128,12 @@ const RegionSpreadsheet = (props) => {
                         </WButton>
                     </WCol>
                     <WCol size="1">
-                        <WButton className="region-spreadsheet-header">
+                        <WButton className="region-spreadsheet-header" onClick={undoTime}>
                         <img className="region-spreadsheet-do" src={undo}></img>
                         </WButton>
                     </WCol>
                     <WCol size="1">
-                        <WButton className="region-spreadsheet-header">
+                        <WButton className="region-spreadsheet-header" onClick={redoTime}>
                         <img className="region-spreadsheet-do" src={redo}></img>
                         </WButton>
                     </WCol>
@@ -110,6 +153,9 @@ const RegionSpreadsheet = (props) => {
                     selectedRegion={props.selectedRegion} setViewing={props.setViewing}
                     enterRegion={props.enterRegion} setActiveRegion={props.setActiveRegion}
                     deleteRegion={props.deleteRegion} deleteSubregion={props.deleteSubregion}
+                    updateRegionField={props.updateRegionField} sortRegions={props.sortRegions}
+                    sortingTime={sortingTime} sortSubregions={props.sortSubregions}
+                    subSortingTime={subSortingTime} setSubLandmarkList={props.setSubLandmarkList}
                 />
             </WMMain>
         </WLayout>

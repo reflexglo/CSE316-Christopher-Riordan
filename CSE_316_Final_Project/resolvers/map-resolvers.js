@@ -79,6 +79,7 @@ module.exports = {
 		deleteRegion: async (_, args) => {
 			const  { _id, regionId } = args;
 			const mapId = new ObjectId(_id);
+			console.log(typeof regionId);
 			const deletedId = new ObjectId(regionId);
 			const found = await Map.findOne({_id: mapId});
 			let mapRegions = found.regions;
@@ -87,6 +88,14 @@ module.exports = {
 			const deleted = await Region.deleteOne({_id: deletedId});
 			if(updated) return ("deleted");
 			else return ("not deleted");
+		},
+		sortRegions: async (_,args) => {
+			const {_id, filter, direction} = args;
+			const mapId = new ObjectId(_id);
+			let newOrder = filter.split(" ");
+			const updated = await Map.updateOne({_id: mapId}, {regions: newOrder});
+			if(updated) return true;
+			else return false;
 		}
     }
 }
