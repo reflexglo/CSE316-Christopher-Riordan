@@ -1,5 +1,6 @@
 const ObjectId = require('mongoose').Types.ObjectId;
 const Region = require('../models/region-model');
+const Map = require('../models/map-model');
 module.exports = {
     Query: {
 		getAllRegions: async (_, __, { req }) => {
@@ -52,7 +53,7 @@ module.exports = {
 			const deletedId = new ObjectId(regionId);
 			const found = await Region.findOne({_id: parentId});
 			let subRegions = found.subregions;
-			subRegions = subRegions.filter(region => region._id !== regionId);
+			subRegions = subRegions.filter(region => region != regionId);
 			const updated = await Region.updateOne({_id: parentId}, { subregions: subRegions });
 			const deleted = await Region.deleteOne({_id: deletedId});
 			if(updated) return ("deleted");
@@ -119,6 +120,30 @@ module.exports = {
 			const found = await Region.findOne({_id: regionId});
 			if(updated) return true;
 			else return false;
+		},
+		changeSubparent: async (_,args) => {
+			const  { _id, regionId, prevMapId, prevRegionId } = args;
+			const parentId = new ObjectId(_id);
+			if(prevMapId == ''){
+				const prevId = new ObjectId(prevRegionId);
+				const found = await Region.findOne({_id: prevId});
+				let subRegions = found.subregions;
+				subRegions = subRegions.filter(region => region != regionId);
+				const updated = await Region.updateOne({_id: prevId}, {subregions: subRegions});
+			}
+			else{
+				const prevId = new ObjectId(prevMapId);
+				const found = await Map.findOne({_id: prevId});
+				let mapRegions = found.regions;
+				mapRegions = mapRegions.filter(region => region != regionId);
+				const updated = await Map.updateOne({_id: prevId}, { regions: mapRegions });
+			}
+			const parent = await Region.findOne({_id: parentId});
+			let parentRegions = parent.subregions;
+			parentRegions.push(regionId);
+			const moved = await Region.updateOne({_id: parentId}, { subregions: parentRegions });
+			if(moved) return "moved";
+			else return "not moved";
 		}
     }
 }

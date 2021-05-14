@@ -67,6 +67,12 @@ export const DELETE_REGION = gql`
 	}
 `;
 
+export const CHANGE_PARENT = gql`
+	mutation ChangeParent($regionId: String!, $_id: String!, $prevMapId: String!, $prevRegionId: String!) {
+		changeParent(regionId: $regionId, _id: $_id, prevMapId: $prevMapId, prevRegionId: $prevRegionId)
+	}
+`;
+
 export const UPDATE_REGION_FIELD = gql`
 	mutation UpdateRegionField($regionId: String!, $field: String!, $value: String!) {
 		updateRegionField(regionId: $regionId, field: $field, value: $value)
@@ -88,6 +94,12 @@ export const ADD_SUBREGION = gql`
 export const DELETE_SUBREGION = gql`
 	mutation DeleteSubregion($regionId: String!, $_id: String!) {
 		deleteSubregion(regionId: $regionId, _id: $_id)
+	}
+`;
+
+export const CHANGE_SUBPARENT = gql`
+	mutation ChangeSubparent($regionId: String!, $_id: String!, $prevMapId: String!, $prevRegionId: String!) {
+		changeSubparent(regionId: $regionId, _id: $_id, prevMapId: $prevMapId, prevRegionId: $prevRegionId)
 	}
 `;
 

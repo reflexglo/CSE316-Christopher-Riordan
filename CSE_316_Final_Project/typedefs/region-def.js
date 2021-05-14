@@ -19,6 +19,7 @@ const typeDefs = gql `
 		addSubregion(region: RegionsInput!, _id: String!, index: Int!): String
 		deleteSubregion(regionId: String!, _id: String!): String		
 		updateRegionField(regionId: String!, field: String!, value: String!): String
+		changeSubparent(regionId: String!, _id: String!, prevMapId: String!, prevRegionId: String!): String
 		sortSubregions(_id: String!, filter: String!, direction: Int!): Boolean
 	}
 `;

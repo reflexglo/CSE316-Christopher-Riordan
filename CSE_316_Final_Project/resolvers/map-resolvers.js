@@ -79,11 +79,10 @@ module.exports = {
 		deleteRegion: async (_, args) => {
 			const  { _id, regionId } = args;
 			const mapId = new ObjectId(_id);
-			console.log(typeof regionId);
 			const deletedId = new ObjectId(regionId);
 			const found = await Map.findOne({_id: mapId});
 			let mapRegions = found.regions;
-			mapRegions = mapRegions.filter(region => region._id !== regionId);
+			mapRegions = mapRegions.filter(region => region != regionId);
 			const updated = await Map.updateOne({_id: mapId}, { regions: mapRegions });
 			const deleted = await Region.deleteOne({_id: deletedId});
 			if(updated) return ("deleted");
@@ -96,6 +95,31 @@ module.exports = {
 			const updated = await Map.updateOne({_id: mapId}, {regions: newOrder});
 			if(updated) return true;
 			else return false;
+		},
+		changeParent: async (_,args) => {
+			const  { _id, regionId, prevMapId, prevRegionId } = args;
+			const mapId = new ObjectId(_id);
+			if(prevMapId == ''){
+				const prevId = new ObjectId(prevRegionId);
+				const found = await Region.findOne({_id: prevId});
+				let subRegions = found.subregions;
+				subRegions = subRegions.filter(region => region != regionId);
+				const updated = await Region.updateOne({_id: prevId}, {subregions: subRegions});
+			}
+			else{
+				const prevId = new ObjectId(prevMapId);
+				const found = await Map.findOne({_id: prevId});
+				let mapRegions = found.regions;
+				mapRegions = mapRegions.filter(region => region != regionId);
+				const updated = await Map.updateOne({_id: prevId}, { regions: mapRegions });
+			}
+			const parent = await Map.findOne({_id: mapId});
+			let parentRegions = parent.regions;
+			parentRegions.push(regionId);
+			const moved = await Map.updateOne({_id: mapId}, { regions: parentRegions });
+			if(moved) return "moved";
+			else return "not moved";
 		}
+
     }
 }

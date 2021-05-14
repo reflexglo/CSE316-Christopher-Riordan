@@ -118,24 +118,51 @@ const RegionSpreadsheet = (props) => {
         },100);
     }
 
+
     return(
         <>
         <WLayout>
                 <WRow>
-                    <WCol size="1">
+                    <WCol size="3">
+                        <ul>
                         <WButton className="region-spreadsheet-header" onClick={handleAdding}>
-                        <img className="region-spreadsheet-plus" src={plus}></img>
+                            <div className="region-spreadsheet-plus">
+                                <i className="material-icons">add</i>
+                            </div>
                         </WButton>
-                    </WCol>
-                    <WCol size="1">
-                        <WButton className="region-spreadsheet-header" onClick={undoTime}>
-                        <img className="region-spreadsheet-do" src={undo}></img>
-                        </WButton>
-                    </WCol>
-                    <WCol size="1">
-                        <WButton className="region-spreadsheet-header" onClick={redoTime}>
-                        <img className="region-spreadsheet-do" src={redo}></img>
-                        </WButton>
+                        <>
+                        {
+                            props.hasUndo() ?
+                            <WButton className="region-spreadsheet-header" onClick={undoTime}>
+                                <div className="region-spreadsheet-do">
+                                    <i className="material-icons">undo</i>
+                                </div>
+                            </WButton>
+                            :
+                            <WButton className="region-spreadsheet-header">
+                                <div className="region-spreadsheet-no">
+                                    <i className="material-icons">undo</i>
+                                </div>
+                            </WButton>
+                        }
+                        </>
+                        <>
+                            {
+                                props.hasRedo() ?
+                                <WButton className="region-spreadsheet-header" onClick={redoTime}>
+                                    <div className="region-spreadsheet-do">
+                                        <i className="material-icons">redo</i>
+                                    </div>
+                                </WButton>
+                                :
+                                <WButton className="region-spreadsheet-header">
+                                    <div className="region-spreadsheet-no">
+                                        <i className="material-icons">redo</i>
+                                    </div>
+                                </WButton>
+                            }
+                        </>
+                        </ul>
                     </WCol>
                     <WCol size="6">
                             <div className="region-name">

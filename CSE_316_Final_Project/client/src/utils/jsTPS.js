@@ -220,6 +220,39 @@ export class SortSubregions_Transaction extends jsTPS_Transaction {
     }
 }
 
+export class ChangeParent_Transaction extends jsTPS_Transaction {
+    constructor(mapId, regionId, subregionId, prevMapId, prevRegionId, callback) {
+        super();
+        this.mapID = mapId;
+        this.regionID = regionId;
+        this.subregionID = subregionId;
+        this.prevMapID = prevMapId;
+        this.prevRegionID = prevRegionId;
+        this.changeFunction = callback;
+    }
+
+    async doTransaction() {
+        let data = undefined;
+        if(this.mapID == ''){
+            data = await this.changeFunction({variables:{_id: this.regionID, regionId: this.subregionID, prevMapId: this.prevMapID, prevRegionId: this.prevRegionID}, refetchQueries: [{ query: GET_DB_REGIONS }]});
+        }
+        else{
+            data = await this.changeFunction({variables:{_id: this.mapID, regionId: this.subregionID, prevMapId: this.prevMapID, prevRegionId: this.prevRegionID}, refetchQueries: [{ query: GET_DB_MAPS }]});
+        }
+        return data;
+    }
+
+    async undoTransaction() {
+        let data = undefined;
+        if(this.prevMapID == ''){
+            data = await this.changeFunction({variables:{_id: this.prevRegionID, regionId: this.subregionID, prevMapId: this.mapID, prevRegionId: this.regionID}, refetchQueries: [{ query: GET_DB_REGIONS }]});
+        }
+        else{
+            data = await this.changeFunction({variables:{_id: this.prevMapID, regionId: this.subregionID, prevMapId: this.mapID, prevRegionId: this.regionID}, refetchQueries: [{ query: GET_DB_MAPS }]});
+        }
+        return data;
+    }
+}
 
 export class EditRegion_Transaction extends jsTPS_Transaction {
 	constructor(regionID, field, prev, update, callback) {
@@ -281,7 +314,6 @@ export class UpdateRegion_Transaction extends jsTPS_Transaction {
         }
         else if(this.opcode == 5){
             data = await this.addFunction({variables: {regionId: this.regionID, field: "add_landmark", value: this.landmark}, refetchQueries: [{ query: GET_DB_REGIONS}]});
-            console.log(data);
             this.landmark = data.data.updateRegionField;
         }
 		return data;
@@ -294,14 +326,12 @@ export class UpdateRegion_Transaction extends jsTPS_Transaction {
        }
        else if(this.opcode == 0){
             data = await this.addFunction({variables: {region: this.subregion, _id: this.mapID, index: this.index}, refetchQueries: [{ query: GET_DB_MAPS }]});
-           this.subregion._id = data.data.addRegion; 
        }
        else if(this.opcode == 3){
             data  = await this.deleteFunction({variables: {regionId: this.subregion._id, _id: this.regionID}, refetchQueries: [{ query: GET_DB_REGIONS }]});
         }
         else if(this.opcode == 2){
             data = await this.addFunction({variables: {region: this.subregion, _id: this.regionID, index: this.index}, refetchQueries: [{ query: GET_DB_REGIONS }]}); 
-            this.subregion._id = data.data.addSubregion;
         }
         else if(this.opcode == 5){
             data = await this.deleteFunction({variables: {regionId: this.regionID, field: "delete_landmark", value: this.landmark}, refetchQueries: [{ query: GET_DB_REGIONS}]});

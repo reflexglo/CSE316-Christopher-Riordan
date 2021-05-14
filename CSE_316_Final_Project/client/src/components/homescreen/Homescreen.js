@@ -14,7 +14,7 @@ import * as mutations 					from '../../cache/mutations';
 import { useMutation, useQuery } 		from '@apollo/client';
 import { WNavbar, WSidebar, WNavItem } 	from 'wt-frontend';
 import { WLayout, WLHeader, WLMain, WLSide } from 'wt-frontend';
-import { UpdateRegion_Transaction, SortRegions_Transaction, EditRegion_Transaction, SortSubregions_Transaction } from '../../utils/jsTPS'
+import { UpdateRegion_Transaction, SortRegions_Transaction, EditRegion_Transaction, SortSubregions_Transaction, ChangeParent_Transaction } from '../../utils/jsTPS'
 
 
 
@@ -51,6 +51,8 @@ const Homescreen = (props) => {
 	const [UpdateRegionField] = useMutation(mutations.UPDATE_REGION_FIELD);
 	const [SortRegions]		= useMutation(mutations.SORT_REGIONS);
 	const [SortSubregions]	= useMutation(mutations.SORT_SUBREGIONS);
+	const [ChangeParent]	= useMutation(mutations.CHANGE_PARENT);
+	const [ChangeSubparent] = useMutation(mutations.CHANGE_SUBPARENT);
 
 	const { loading, error, data, refetch } = useQuery(GET_DB_MAPS);
 	if(loading) { console.log(loading, 'loading'); }
@@ -86,6 +88,7 @@ const Homescreen = (props) => {
 			let tempID = activeMap._id;
 			let thisMap = maps.find(thisMap => thisMap._id === tempID);
 			setActiveMap(thisMap);
+			console.log(thisMap.regions);
 		}
 	}
 
@@ -139,6 +142,36 @@ const Homescreen = (props) => {
 		refetch();
 	};
 
+	const changeParent = async (_id, prevMapId, prevRegionId) => {
+		let transaction = new ChangeParent_Transaction(_id,'',activeRegion._id,prevMapId,prevRegionId,ChangeParent);
+		props.tps.addTransaction(transaction);
+		tpsRedo();
+		for(let i = 0;i<maps.length;i++){
+			if(maps[i]._id == _id){
+				setActiveMap(maps[i]);
+				setSelectedMap(maps[i]);
+			}
+		}
+		setSelectedRegion(undefined);
+	}
+
+	const changeSubparent = async (_id, prevMapId, prevRegionId, newActiveMapId) => {
+		let transaction = new ChangeParent_Transaction('',_id,activeRegion._id,prevMapId,prevRegionId,ChangeSubparent);
+		props.tps.addTransaction(transaction);
+		tpsRedo();
+		for(let i = 0;i<maps.length;i++){
+			if(maps[i]._id == newActiveMapId){
+				setActiveMap(maps[i]);
+				setSelectedMap(maps[i]);
+			}
+		}
+		for(let i = 0;i<regions.length;i++){
+			if(regions[i]._id == _id){
+				setSelectedRegion(regions[i]);
+			}
+		}
+	}
+
 	const addRegion = async () => {
 		const length = regions.length
 		const id = length >= 1 ? regions[length - 1].id + Math.floor((Math.random() * 100) + 1) : 1;
@@ -175,13 +208,35 @@ const Homescreen = (props) => {
 	}
 
 	const deleteRegion = async (region) => {
-		let transaction = new UpdateRegion_Transaction(activeMap._id,undefined,region,0,AddRegion,DeleteRegion);
+		let index = activeMap.regions.indexOf(region._id);
+		let thisSubregion = {
+			_id: region._id,
+			id: region.id,
+			owner: props.user._id,
+			name: region.name,
+			capital: region.capital,
+			leader: region.leader,
+			landmarks: region.landmarks,
+			subregions: region.subregions,
+		}
+		let transaction = new UpdateRegion_Transaction(activeMap._id,undefined,thisSubregion,0,AddRegion,DeleteRegion,index);
 		props.tps.addTransaction(transaction);
 		tpsRedo();
 	}
 
 	const deleteSubregion = async (region) => {
-		let transaction = new UpdateRegion_Transaction(undefined,selectedRegion._id,region,2,AddSubregion,DeleteSubregion);
+		let index = selectedRegion.subregions.indexOf(region._id);
+		let thisSubregion = {
+			_id: region._id,
+			id: region.id,
+			owner: props.user._id,
+			name: region.name,
+			capital: region.capital,
+			leader: region.leader,
+			landmarks: region.landmarks,
+			subregions: region.subregions,
+		}
+		let transaction = new UpdateRegion_Transaction(undefined,selectedRegion._id,thisSubregion,2,AddSubregion,DeleteSubregion,index);
 		props.tps.addTransaction(transaction);
 		tpsRedo();
 	}
@@ -451,7 +506,8 @@ const Homescreen = (props) => {
 					deleteRegion={setShowDeleteRegion} deleteSubregion={setShowDeleteSubregion}
 					updateRegionField={updateRegionField} resetActiveRegion={resetActiveRegion}
 					tpsUndo={tpsUndo} tpsRedo={tpsRedo} addLandmark={addLandmark} removeLandmark={removeLandmark}
-					sortRegions={sortRegions} sortSubregions={sortSubregions}
+					sortRegions={sortRegions} sortSubregions={sortSubregions} hasUndo={hasUndo} hasRedo={hasRedo}
+					changeParent={changeParent} changeSubparent={changeSubparent}
 				/>
 			</WLMain>
             {

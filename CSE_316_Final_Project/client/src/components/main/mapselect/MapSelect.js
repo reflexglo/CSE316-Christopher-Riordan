@@ -30,10 +30,12 @@ const MapSelect = (props) => {
         }
     }
     const handleAdding = () => {
-        props.addNewMap(mapName);
-        setMapLength(props.maps.length+1);
-        setAddedMap(true);
-        mapName = "";
+        if(mapName != ''){
+            props.addNewMap(mapName);
+            setMapLength(props.maps.length+1);
+            setAddedMap(true);
+            mapName = "";
+        }
     }
     const handleNaming = (e) => {
         const { name, value } = e.target;

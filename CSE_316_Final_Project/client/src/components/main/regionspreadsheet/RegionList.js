@@ -42,14 +42,18 @@ for(let k = 0;k<props.selectedRegion.subregions.length;k++){
                 <WLayout>
                     <WMHeader className="region-list-header">
                         <WRow>
-                            <WCol size="2" onClick={() => handleSubSorting("name")}>
-                                Name:
+                        <>
+                                {
+                                    subRegions.length > 0 ?
+                                    <>
+                            <WCol size="2" className="sort-arrow" onClick={() => handleSorting("name")}>
+                                Name: <i className="material-icons">expand_more</i>
                             </WCol>
-                            <WCol size="2" onClick={() => handleSubSorting("capital")}>
-                                Capital:
+                            <WCol size="2" className="sort-arrow" onClick={() => handleSorting("capital")}>
+                                Capital: <i className="material-icons">expand_more</i>
                             </WCol>
-                            <WCol size="3" onClick={() => handleSubSorting("leader")}>
-                                Leader:
+                            <WCol size="3" className="sort-arrow" onClick={() => handleSorting("leader")}>
+                                Leader: <i className="material-icons">expand_more</i>
                             </WCol>
                             <WCol size="1">
                                 Flag:
@@ -57,6 +61,27 @@ for(let k = 0;k<props.selectedRegion.subregions.length;k++){
                             <WCol size="4">
                                 Landmarks:
                             </WCol>
+                                    </>
+                                    :
+                                    <>
+                                <WCol size="2">
+                                    Name:
+                                </WCol>
+                                <WCol size="2">
+                                    Capital:
+                                </WCol>
+                                <WCol size="3">
+                                    Leader:
+                                </WCol>
+                                <WCol size="1">
+                                    Flag:
+                                </WCol>
+                                <WCol size="4">
+                                    Landmarks:
+                                </WCol>
+                                    </>
+                                }
+                            </>
                         </WRow>
                     </WMHeader>
                     <WMMain className="region-list-main">
@@ -67,6 +92,7 @@ for(let k = 0;k<props.selectedRegion.subregions.length;k++){
                                     enterRegion={props.enterRegion} setSelectedRegion={props.setSelectedRegion}
                                     setActiveRegion={props.setActiveRegion} deleteRegion={props.deleteSubregion}
                                     updateRegionField={props.updateRegionField} regions={props.regions}
+                                    setSubLandmarkList={props.setSubLandmarkList}
                                 />
                             ))
                         }
@@ -81,14 +107,18 @@ for(let k = 0;k<props.selectedRegion.subregions.length;k++){
                 <WLayout>
                     <WMHeader className="region-list-header">
                         <WRow>
-                            <WCol size="2" onClick={() => handleSorting("name")}>
-                                Name:
+                            <>
+                                {
+                                    mapRegions.length > 0 ?
+                                    <>
+                            <WCol size="2" className="sort-arrow" onClick={() => handleSorting("name")}>
+                                Name: <i className="material-icons">expand_more</i>
                             </WCol>
-                            <WCol size="2" onClick={() => handleSorting("capital")}>
-                                Capital:
+                            <WCol size="2" className="sort-arrow" onClick={() => handleSorting("capital")}>
+                                Capital: <i className="material-icons">expand_more</i>
                             </WCol>
-                            <WCol size="3" onClick={() => handleSorting("leader")}>
-                                Leader:
+                            <WCol size="3" className="sort-arrow" onClick={() => handleSorting("leader")}>
+                                Leader: <i className="material-icons">expand_more</i>
                             </WCol>
                             <WCol size="1">
                                 Flag:
@@ -96,6 +126,27 @@ for(let k = 0;k<props.selectedRegion.subregions.length;k++){
                             <WCol size="4">
                                 Landmarks:
                             </WCol>
+                                    </>
+                                    :
+                                    <>
+                                <WCol size="2">
+                                    Name:
+                                </WCol>
+                                <WCol size="2">
+                                    Capital:
+                                </WCol>
+                                <WCol size="3">
+                                    Leader:
+                                </WCol>
+                                <WCol size="1">
+                                    Flag:
+                                </WCol>
+                                <WCol size="4">
+                                    Landmarks:
+                                </WCol>
+                                    </>
+                                }
+                            </>
                         </WRow>
                     </WMHeader>
                     <WMMain className="region-list-main">

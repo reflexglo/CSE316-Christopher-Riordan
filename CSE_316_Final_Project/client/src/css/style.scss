@@ -309,14 +309,33 @@ html, body {
     font-size: 15px;
 }
 .region-spreadsheet-plus{
-    width:75%;
+    color: green;
 }
 .region-spreadsheet-do{
-    width:100%;
+    color:white;
+}
+.region-spreadsheet-no{
+    color:black;
+}
+.material-icons{
+    font-size: 250%;
+}
+.change-parent > .material-icons{
+    font-size: 100%;
+    color: yellow;
+    display: block;
+    float: left;
+}
+.sort-arrow > .material-icons{
+    font-size: 100%;
+}
+.parent-naming{
+    margin-left: 0%;
+    margin-top: 0%;
 }
 .region-spreadsheet-header{
     background-color: $background-color;
-    width: 50%;
+    width: 20%;
 }
 .region-name{
     text-align: center;
@@ -389,7 +408,10 @@ html, body {
     width: 10%;
 }
 .region-viewer-do{
-    width:150%;
+    color:white;
+}
+.region-viewer-no{
+    color:black;
 }
 .region-viewer-main{
     margin-left: 5%;
@@ -460,6 +482,8 @@ html, body {
 .parent-name{
     color:rgb(83, 83, 255);
     text-align: left;
+    display: block;
+    float: left;
 }
 .parent-name:hover{
     cursor: pointer;
@@ -474,4 +498,35 @@ html, body {
 .nav-arrow:hover{
     color:darkcyan;
     cursor: pointer;
+}
+.change-list{
+    background-color: black;
+    width: 100%;
+    overflow-y: scroll;
+}
+.change-entry{
+    padding-top: 5px;
+}
+.change-entry:hover{
+    cursor: pointer;
+    background-color: darkcyan;
+}
+.change-title{
+    color:white;
+    text-align: center;
+    font-size: 25px;
+}
+.region-viewer-change{
+    margin-left: 30%;
+    margin-right: 30%;
+    padding-top: 20px;
+    color:white;
+    font-size: 20px;
+}
+.select-parent{
+    background-color: lightcyan;
+    color: black;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
 }
