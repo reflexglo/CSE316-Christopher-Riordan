@@ -93,14 +93,14 @@ const RegionSpreadsheet = (props) => {
         setSortTime(true);
         setTimeout(() => {  
              setSortTime(false);
-        },100);
+        },200);
     }
 
     const subSortingTime = () => {
         setSubSortTime(true);
         setTimeout(() => {  
              setSubSortTime(false);
-        },100);
+        },200);
     }
 
     const undoTime = () => {
@@ -108,7 +108,7 @@ const RegionSpreadsheet = (props) => {
         setSortTime(true);
         setTimeout(() => {  
              setSortTime(false);
-        },100);
+        },200);
     }
 
     const redoTime = () => {
@@ -116,7 +116,7 @@ const RegionSpreadsheet = (props) => {
         setSortTime(true);
         setTimeout(() => {  
              setSortTime(false);
-        },100);
+        },200);
     }
 
 
@@ -198,6 +198,7 @@ const RegionSpreadsheet = (props) => {
                     updateRegionField={props.updateRegionField} sortRegions={props.sortRegions}
                     sortingTime={sortingTime} sortSubregions={props.sortSubregions}
                     subSortingTime={subSortingTime} setSubLandmarkList={props.setSubLandmarkList}
+                    tps={props.tps}
                 />
             </WMMain>
         </WLayout>

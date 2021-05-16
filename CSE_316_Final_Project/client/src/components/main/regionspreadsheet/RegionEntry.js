@@ -53,6 +53,7 @@ const RegionEntry = (props) => {
             }
         }
         props.setSubLandmarkList(landmarkSubList);
+        props.tps.clearAllTransactions();
     }
 
     const handleSelecting = () => {

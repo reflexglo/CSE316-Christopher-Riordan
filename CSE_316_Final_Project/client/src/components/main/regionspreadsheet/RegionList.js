@@ -33,7 +33,7 @@ for(let k = 0;k<props.selectedRegion.subregions.length;k++){
 
     const handleSubSorting = (filter) => {
         props.sortSubregions(filter);
-        props.subSortingTime();
+        props.sortingTime();
     }
 
     if(props.selectedRegion){
@@ -46,13 +46,13 @@ for(let k = 0;k<props.selectedRegion.subregions.length;k++){
                                 {
                                     subRegions.length > 0 ?
                                     <>
-                            <WCol size="2" className="sort-arrow" onClick={() => handleSorting("name")}>
+                            <WCol size="2" className="sort-arrow" onClick={() => handleSubSorting("name")}>
                                 Name: <i className="material-icons">expand_more</i>
                             </WCol>
-                            <WCol size="2" className="sort-arrow" onClick={() => handleSorting("capital")}>
+                            <WCol size="2" className="sort-arrow" onClick={() => handleSubSorting("capital")}>
                                 Capital: <i className="material-icons">expand_more</i>
                             </WCol>
-                            <WCol size="3" className="sort-arrow" onClick={() => handleSorting("leader")}>
+                            <WCol size="3" className="sort-arrow" onClick={() => handleSubSorting("leader")}>
                                 Leader: <i className="material-icons">expand_more</i>
                             </WCol>
                             <WCol size="1">
@@ -93,6 +93,7 @@ for(let k = 0;k<props.selectedRegion.subregions.length;k++){
                                     setActiveRegion={props.setActiveRegion} deleteRegion={props.deleteSubregion}
                                     updateRegionField={props.updateRegionField} regions={props.regions}
                                     setSubLandmarkList={props.setSubLandmarkList}
+                                    tps={props.tps}
                                 />
                             ))
                         }
@@ -158,6 +159,7 @@ for(let k = 0;k<props.selectedRegion.subregions.length;k++){
                                     setActiveRegion={props.setActiveRegion} deleteRegion={props.deleteRegion}
                                     updateRegionField={props.updateRegionField} regions={props.regions}
                                     setSubLandmarkList={props.setSubLandmarkList}
+                                    tps={props.tps}
                                 />
                             ))
                         }

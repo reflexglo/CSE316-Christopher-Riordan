@@ -211,11 +211,12 @@ export class SortSubregions_Transaction extends jsTPS_Transaction {
                 newOrder += this.regions[i]._id;
             }
         }
-        const {data} = await this.updateFunction({variables:{_id: this.regionID, filter: newOrder, direction: this.dir}, refetchQueries: [{ query: GET_DB_REGIONS }]})
+        console.log(newOrder);
+        const {data} = await this.updateFunction({variables:{_id: this.regionID, filter: newOrder, direction: this.dir}, refetchQueries: [{ query: GET_DB_REGIONS }]});
         return data;
     }
     async undoTransaction() {
-        const {data} = await this.updateFunction({variables:{_id: this.regionID, filter: this.prevOrder, direction: this.dir}, refetchQueries: [{ query: GET_DB_REGIONS }]})
+        const {data} = await this.updateFunction({variables:{_id: this.regionID, filter: this.prevOrder, direction: this.dir}, refetchQueries: [{ query: GET_DB_REGIONS }]});
         return data;
     }
 }

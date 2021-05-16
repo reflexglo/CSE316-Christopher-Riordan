@@ -35,6 +35,7 @@ const Pathway = (props) => {
             props.setPaths(pathArr[0]);
         }
         props.setViewing(false);
+        props.tps.clearAllTransactions();
     }
 
     return(

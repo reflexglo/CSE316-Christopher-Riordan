@@ -76,6 +76,7 @@ const RegionViewer = (props) => {
     const handleReturn = () => {
         props.setViewing(false);
         props.setActiveRegion(undefined);
+        props.tps.clearAllTransactions();
     }
 
     const handleNaming = (e) => {

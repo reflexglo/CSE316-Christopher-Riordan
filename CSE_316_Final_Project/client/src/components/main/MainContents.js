@@ -36,6 +36,7 @@ const MainContents = (props) => {
                                     updateRegionField={props.updateRegionField} tpsUndo={props.tpsUndo} tpsRedo={props.tpsRedo}
                                     sortRegions={props.sortRegions} sortSubregions={props.sortSubregions}
                                     setSubLandmarkList={setSubLandmarkList} hasUndo={props.hasUndo} hasRedo={props.hasRedo}
+                                    tps={props.tps}
                                 />)
         }
         {
@@ -48,6 +49,7 @@ const MainContents = (props) => {
                                 regions={props.regions} subLandmarkList={subLandmarkList} hasUndo={props.hasUndo} hasRedo={props.hasRedo}
                                 maps={props.maps} changeParent={props.changeParent} changeSubparent={props.changeSubparent}
                                 selectedRegion={props.selectedRegion} activeMap={props.activeMap}
+                                tps={props.tps}
                             />)
         }
         </>

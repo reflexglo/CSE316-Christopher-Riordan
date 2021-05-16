@@ -117,7 +117,6 @@ module.exports = {
 			const regionId = new ObjectId(_id);
 			let newOrder = filter.split(" ");
 			const updated = await Region.updateOne({_id: regionId}, {subregions: newOrder});
-			const found = await Region.findOne({_id: regionId});
 			if(updated) return true;
 			else return false;
 		},

@@ -88,7 +88,6 @@ const Homescreen = (props) => {
 			let tempID = activeMap._id;
 			let thisMap = maps.find(thisMap => thisMap._id === tempID);
 			setActiveMap(thisMap);
-			console.log(thisMap.regions);
 		}
 	}
 
@@ -479,6 +478,7 @@ const Homescreen = (props) => {
 								setPaths={setPaths} setPathname={setPathname}
 								setViewing={setViewing} viewing={viewing}
 								viewNextRegion={viewNextRegion} viewPreviousRegion={viewPreviousRegion}
+								tps={props.tps}
 							/>
 					</ul>
 					}
@@ -508,6 +508,7 @@ const Homescreen = (props) => {
 					tpsUndo={tpsUndo} tpsRedo={tpsRedo} addLandmark={addLandmark} removeLandmark={removeLandmark}
 					sortRegions={sortRegions} sortSubregions={sortSubregions} hasUndo={hasUndo} hasRedo={hasRedo}
 					changeParent={changeParent} changeSubparent={changeSubparent}
+					tps={props.tps}
 				/>
 			</WLMain>
             {
