@@ -10,6 +10,7 @@ import plus from './plus.jpg'
 import undo from './undo.jpg'
 import redo from './redo.jpg'
 import WLayout from 'wt-frontend/build/components/wlayout/WLayout';
+import Hotkeys from 'react-hot-keys';
 
 const RegionSpreadsheet = (props) => {
     const regionName = props.selectedRegion ? "Region Name: " + props.selectedRegion.name : "Region Name: " + props.selectedMap.name;
@@ -133,11 +134,18 @@ const RegionSpreadsheet = (props) => {
                         <>
                         {
                             props.hasUndo() ?
+                            <>
                             <WButton className="region-spreadsheet-header" onClick={undoTime}>
                                 <div className="region-spreadsheet-do">
                                     <i className="material-icons">undo</i>
                                 </div>
                             </WButton>
+                            <Hotkeys 
+                                keyName="ctrl+z" 
+                                onKeyDown={undoTime}
+                            >
+                            </Hotkeys>
+                            </>
                             :
                             <WButton className="region-spreadsheet-header">
                                 <div className="region-spreadsheet-no">
@@ -149,11 +157,18 @@ const RegionSpreadsheet = (props) => {
                         <>
                             {
                                 props.hasRedo() ?
+                                <>
                                 <WButton className="region-spreadsheet-header" onClick={redoTime}>
                                     <div className="region-spreadsheet-do">
                                         <i className="material-icons">redo</i>
                                     </div>
                                 </WButton>
+                                <Hotkeys 
+                                keyName="ctrl+y" 
+                                onKeyDown={redoTime}
+                            >
+                            </Hotkeys>
+                            </>
                                 :
                                 <WButton className="region-spreadsheet-header">
                                     <div className="region-spreadsheet-no">

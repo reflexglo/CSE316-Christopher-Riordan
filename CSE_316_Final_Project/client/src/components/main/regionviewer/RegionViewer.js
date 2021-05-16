@@ -14,7 +14,7 @@ import Hotkeys from 'react-hot-keys';
 
 const RegionViewer = (props) => {
     let landmarkName = "";
-    const parentName = props.selectedRegion == undefined ? props.activeMap.name : props.selectedRegion.name;
+    let parentName = props.selectedRegion == undefined ? props.activeMap.name : props.selectedRegion.name;
     const [adding, setAdding] = useState(false);
     const [deleting, setDeleting] = useState(false);
     const [editing, setEditing] = useState(false);
@@ -22,6 +22,16 @@ const RegionViewer = (props) => {
     const [change, setChange] = useState("");
     const [doTime, setDoTime] = useState(false);
     const [changeParent, setChangeParent] = useState(false);
+
+    const importAllFlags = (dir) => {
+        let flags = {};
+        dir.keys().map((flag, index) => { flags[flag.replace('./', '')] = dir(flag); });
+        return flags;
+      }
+
+    const flags = importAllFlags(require.context('./The World', false, /\.(png|jpe?g|svg)$/));
+
+    const thisFlag = flags[props.activeRegion.name+" Flag.png"];
 
     if(adding){
         if(landLength > props.activeRegion.landmarks.length){
@@ -93,7 +103,6 @@ const RegionViewer = (props) => {
     <WLayout>
         <WRow>
             <WCol size="2">
-
             </WCol>
             <WCol size="4">
                 
@@ -146,7 +155,7 @@ const RegionViewer = (props) => {
                     </>
                 </ul>
                 <div className="region-viewer-main">
-                    Region Picture
+                    <img className="viewer-flag" src={thisFlag} />
                 </div>
                 <div className="region-viewer-main">
                     Region Name: {props.activeRegion.name}
@@ -223,6 +232,7 @@ const RegionViewer = (props) => {
                                     changeSubparent={props.changeSubparent}
                                     selectedRegion={props.selectedRegion}
                                     activeMap={props.activeMap}
+                                    activeRegion={props.activeRegion}
                                 />
                             </div>
                         }

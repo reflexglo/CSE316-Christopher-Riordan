@@ -3,6 +3,7 @@ import { WInput, WNavItem } from 'wt-frontend';
 import WButton from 'wt-frontend/build/components/wbutton/WButton';
 import WCol from 'wt-frontend/build/components/wgrid/WCol';
 import WRow from 'wt-frontend/build/components/wgrid/WRow';
+import Hotkeys from 'react-hot-keys';
 
 const RegionEntry = (props) => {
     const activeStyle = props.isActive ? "active-region" : "item-region";
@@ -11,6 +12,16 @@ const RegionEntry = (props) => {
     const [capitalEdit, setCapitalEdit] = useState(false);
     const left = " < ";
     const right = " > ";
+
+    const importAllFlags = (dir) => {
+        let flags = {};
+        dir.keys().map((flag, index) => { flags[flag.replace('./', '')] = dir(flag); });
+        return flags;
+      }
+
+    const flags = importAllFlags(require.context('./The World', false, /\.(png|jpe?g|svg)$/));
+
+    const thisFlag = flags[props.region.name+" Flag.png"];
 
     const handleViewing = () => {
         props.setViewing(true);
@@ -124,6 +135,11 @@ const RegionEntry = (props) => {
                             capitalEdit ?
                             <WRow>
                                 <WCol size="1">
+                                <Hotkeys 
+                                keyName="LeftArrow" 
+                                onKeyDown={() => handleNavigate("name")}
+                                >
+                                </Hotkeys>
                                     <WButton onClick={() => handleNavigate("name")}>{left}</WButton>
                                 </WCol>
                                 <WCol size="10">
@@ -157,6 +173,7 @@ const RegionEntry = (props) => {
                         }    
                     </WCol>
                     <WCol size="1">
+                        <img className="spreadsheet-flag" src={thisFlag} />
                     </WCol>
                     <WCol size="4">
                         <div className="region-entry" onClick={handleViewing}>
